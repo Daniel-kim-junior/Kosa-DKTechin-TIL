@@ -310,14 +310,38 @@ Mark and Sweep 알고리즘 외에도, Java에서는 압축(Compaction) 알고�
 
 ---
 
+### 에러 처리
+
+    try catch finally - 적극적 예외 처리
+    runTime Error를 의도적인 프로그램의 한 부분으로 바꿀 수 있다.
+    
+    throw throws - 에러를 상위 스택으로 책임을 위임하는 소극적 예외 처리 마지막까지 던지게 된다면 JVM이 처리하게 된다
+    
+    
+    Exception을 조상으로 가지고 있는 메소드들은 반드시 예외를 처리해 주어야 한다.
+    RunTimeException을 조상으로 가지고 있는 메소드들은 예외를 선택적으로 처리할 수 있다.
 
 
+---
 
-### Generic이란?
+### interface vs Abstract class
+    - 둘다 추상화(다형성)를 위한 도구
+    - Java8에서 부터 Interface는 default method와 static Method를 가지게 되었다.(구현 가능)
+    - interface는 상수만 사용할 수 있다 (public static final - 자동으로 붙여준다.)
+    - interface는 모든 추상 메서드를 public으로 강제한다.
+    - 반면에 Abstract는 다양한 접근제어자를 사용 가능하다.
+    - Abstract는 생성자를 가질 수 있다.
+    - interface는 다중 상속이 가능하다 상속 받을 때는 extends 키워드를 사용한다
+    
+---
 
-
-
-
+### 상속
+    - 상속 주의점!
+        - 접근제어자를 조상보다 더 넓거나 같은 접근제어자만 사용 가능하다.
+        - class 상속은 Override를 강제하지 않지만 interface는 Override를 강제한다.
+        - 부모 변수에 담은 자식 인스턴스는 부모에 정의되어 있지 않은 메소드를 사용해야 할 때
+            명시적 형변환이 필요하다
+        
 
 
 ### 주요 유형 참조 방식 3가지
@@ -325,3 +349,7 @@ Mark and Sweep 알고리즘 외에도, Java에서는 압축(Compaction) 알고�
 1. 강한 참조 (Strong Reference) - 
 2. 부드러운 참조 (Soft Reference) -
 3. 약한 참조(Weak Reference) -
+
+---
+
+### 제네릭
