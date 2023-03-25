@@ -47,11 +47,16 @@
 ## Kubernetes
   - 쿠버네티스를 다룰 폴더
   - 가용성과 확장가능성을 높인 아키텍처를 배포할 기반을 쌓을 것
-  - 각종 트러블 슈팅을 해보고 최적화를 고민해볼 것
+  - 각종 트러블 슈팅과 쿠버네티스 Virtual Network를 구축 해보고 최적화를 고민해볼 것
   
 ## MSA Middleware
   - MSA 분산환경에 필요한 트래픽 추적과 시각화, 환경 구축에 대한 폴더
   - Prometheus, Grafana, Helm을 토대로 학습할 것
-  - Message Queue로 서비스들의 통신을 단순화 해볼 것
   - istio로 쿠버네티스의 복잡한 네트워킹을 단순화 해볼 것
 
+## Spring Cloud
+  - MSA 분산 아키텍처를 구축하기 위해 제공되는 스프링 클라우드 라이브러리들을 학습해 볼 것
+  - 트랜잭션 분할 관리 패턴인 Saga 패턴을 공부해보고 구축해 볼 것
+  - Eureka, Hystrix 등을 이용해 서비스 디스커버리, 라우팅, 로드 밸런싱등을 구현해 볼 것
+  - Message Broker(kafka, RabbitMQ) 등으로 서비스들의 통신을 단순화 해볼 것
+  
