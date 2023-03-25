@@ -272,4 +272,347 @@ Count( * )은 해당 Row의 총 개수를 Null 포함
 - 주의점 : Group by나 order by를 할 때 CASE를 같이 써줘야 한다는 것
 
 
+## Index
+
+	Index에 대한 고찰...
+	Index란?
+	- Index는 TABLE 에 저장되어 있는 데이터를 쉽게 찾기 위한 색인(목차)
+	- 별도의 메모리를 할당하여(특정 컬럼 대상) 튜플의 값과 Pointer를 저장하여
+	- 전체 Table을 검색하지 않아도 해당 튜플을 바로 찾아갈 수 있는 구조
+
+**별도의 메모리로 운영하기 때문에, Insert / Update / Delete와 같은 데이터 변경시에
+Index 공간에도 더 많은 변경이 있어서 성능이 조금 느려짐, Select의 성능은 훨씬 늘어난다.
+- 데이터 변경에 대한 행위만 느려진다!!
+- 검색은 향상된다
+
+
+***B+TREE DataStructure
+
+	Index 기반으로 하는 B-Tree 자료구조는 크게 3가지 레벨로 구성되어 있다.
+	ROOT -> BRANCH(Internal) -> Leaf
+	상위 레벨에서는 하위 레벨에 대한 key 값의 Range 정보를 가지고 있다는 것
+
+
+**Range Scan?
+
+	특정 Key 값의 범위에 대해서만 검색을 할 수 있는 것
+
+
+**Leaf Node에 들어있는 데이터는 실질적인 데이터가 담겨있는 Row를 가리키는 주소값
+- 이 주소값을 빠르게 찾기 위한 query를 작성해야 한다!!!
+
+
+
+## Index 탐색 과정
+
+![[Pasted image 20230303175832.png]]
+
+- **수직적 탐색 :     인덱스 스캔 시작지점을 찾는 과정
+- **수평적 탐색 :     데이터를 찾는 과정
+
+#수직적탐색 은 Root -> Branch -> Leaf로 탐색하여 검색조건을 만족하는 첫 번째 레코드를 찾는 것을 목표.(이진 탐색)
+
+#수평적탐색 은 수직적 탐색에서 찾은 첫 번째 레코드를 바탕으로, 찾고자 하는 데이터가 더 안나올 때 까지 Leaf Block을 수평적으로 스캔.
+여기서 획득한 Pointer를 기반으로 실제 테이블에 엑세스.
+
+```
+그렇다면 어떻게 설계하는 것이 올바르게 인덱스를 설계하는 것일까?
+
+1. 수직적 탐색에서 최대한 빠르게 첫 번째 레코드 시작점을 찾는것
+2. 수평적 탐색에서 해당하는 범위 레코드 수를 줄이는 것
+```
+
+
+### 수평적 탐색에서 해당하는 범위 레코드 수를 줄이는 법
+
+	범위 레코드의 수를 줄이는 방법은 바로 카디널리티가 높아야 한다는 것.
+	즉 중복이 최대한 없는 컬럼이 유리하다는 것
+	(중복 value가 많다는 것은 그만큼 많은 범위의 레코드를 검색해야 한다.)
+
+
+### 결합 Index로 해결 해보자
+
+	- 아래와 같은 Table 을 만들고, 데이터는 대략적으로 100만건
+```
+import org.springframework.data.annotation.CreatedDate 
+import java.math.BigDecimal 
+import java.time.ZonedDateTime 
+import javax.persistence.* 
+@Entity @Table(name = "order_table") 
+class OrderTable( 
+@Id @GeneratedValue 
+val id: Long? = null, 
+@Column(name = "purchaser_id", nullable = false) 
+val purchaser: Long, 
+@Column(name = "seller_id", nullable = false) 
+val seller: Long, 
+@Column(name = "gift", nullable = false) 
+val isGift: Boolean, 
+@Column(name = "service_location", length = 20) 
+val serviceLocation: String?, 
+@Column(name = "pay_amount", scale = 2) 
+val payAmount: BigDecimal, ) 
+{ 
+
+@CreatedDate 
+@Column(name = "created_at", nullable = false) 
+var createdAt: ZonedDateTime = ZonedDateTime.now() 
+
+override fun equals(other: Any?): Boolean { 
+if (this === other) 
+return true 
+if (other !is OrderTable) return false 
+if (id != other.id) return false 
+
+	return true 
+} 
+override fun hashCode(): Int { return id.hashCode() } }
+```
+
+
+***DDL
+```
+-- auto-generated definition 
+create table order_table ( 
+id bigint not null primary key, 
+created_at datetime not null, 
+gift bit not null, 
+pay_amount decimal(19, 2) null, 
+purchaser_id bigint not null, 
+seller_id bigint not null, 
+service_location varchar(20) null )
+```
+
+
+***카디널리티 크기 순서
+```
+select count(distinct id) 'id', 
+count(distinct purchaser_id) 'purchaser', 
+count(distinct seller_id) 'seller', 
+count(distinct gift) 'gift', 
+count(distinct pay_amount) 'pay_amount', 
+count(distinct service_location) 'service_location' 
+from order_table ;
+```
+![[Pasted image 20230303184214.png]]
+
+
+### 카디널리티에 따른 성능 차이
+
+	주문 데이터를 찾아보고 싶은데, 요구사항은 구매유형(buy/gift), 샐러(seller_id), 결제금액(pay_amount) 기준으로 집계
+
+	2가지 결합 Index를 만들어보자
+	첫번째는 카디널리티가 낮은 순서에서 높은 순서대로 진행
+	두번째는 카디널리티가 높은 순서에서 낮은 순서대로 진행
+
+
+```
+create index order_table__gift_index on order_table (gift, seller_id, pay_amount); create index order_table__pay_amount_index on order_table (pay_amount, seller_id, gift);
+```
+
+1. 첫번째 결과 (***카디널리티가 낮은 순서에서 높은 순서의 결합 Index)
+```
+test_db> select * from order_table use index(order_table__gift_index) where pay_amount between 200000 and 300000 and seller_id = 5000 and gift is true [2022-06-26 18:58:06] 9 rows retrieved starting from 1 in 1 s 882 ms (execution: 1 s 863 ms, fetching: 19 ms)
+
+1초 882 ms 소요
+```
+
+2. 두번째 결과 (***카디널리티가 높은 순서에서 낮은 순서의 결합 Index)
+```
+test_db> select * from order_table use index(order_table__pay_amount_index) where pay_amount between 200000 and 300000 and seller_id = 5000 and gift is true [2022-06-26 18:58:32] 9 rows retrieved starting from 1 in 76 ms (execution: 55 ms, fetching: 21 ms)
+
+76 ms 소요
+```
+
+***카디널리티에 따라 쿼리 성능이 확연히 차이나는것을 알 수 있는 부분
+결과적으로 비교 연산에 대한 횟수를 줄이기 위해서라도 카디널리티는 Index 설계에 아주 중요한 요소를 하게 된다.
+
+
+### 복합 Index에서 조건절에 누락이 발생하게 된다면?
+
+- 복합 Index 에서 첫번째 column 은 항상 조건절에 있어야 된다.
+
+
+### Index가 항상 모든 검색에서 효율적인가?
+
+	![[Pasted image 20230303185308.png]]
+	Index를 통해 검색하면 항상 속도가 빠르기 때문에 좋아보이지만
+	Index를 통해 검색한다는 것은 하나의 튜플(Block)을 I/O로 실어나르는 Process가 일어난다.
+	그렇기 때문에 소량의 데이터를 빠르게 읽을 때 굉장히 효과적이다.
+
+	반대로 Table Full Scan 한다는 것은 Multi Block I/O 기반으로 읽게된다.
+	Mutli Block I/O는 여러개의 Block을 한번에 I/O로 실어 나른다.
+	그렇기 때문에 대량의 데이터에 I/O가 일어나면 효과적이다
+
+
+***그래서 Table Full Scan이 항상 나쁘다고 볼 수 없다
+대량의 데이터를 추출하는 Process에는 Table Full Scan이 효과적!!
+
+
+#TableFull scan
+
+Multi Block I/O 이기 때문에 집계성 SQL / 배치 프로그램에 유용 (수백만 ~ 수천만)
+
+#IndexRange scan
+
+Single Block I/O 라서 소량의 데이터를 추출하는 비즈니스 쿼리에 유용
+
+
+## Join
+
+![[Pasted image 20230303190624.png]]
+
+### CROSS JOIN(상호 조인 - 카테시안 곱)
+![[Pasted image 20230303190754.png]]
+- 모든 행을 조인시키는 기능 (두 테이블의 각 행의 개수를 곱한 수 만큼 출력)
+
+
+### SELF JOIN(자체 조인)
+
+
+## 서브 쿼리란?
+
+하나의 SQL문안에 포함되어 있는 또 다른 SQL 문을 말합니다.
+
+---
+#주의사항
+1. 서브 쿼리를 괄호로 감싸서 사용한다.
+2. 서브 쿼리는 단일 행 또는 복수 행 비교 연산자와 함께 사용 가능하다.
+3. 서브 쿼리에서는 ORDER BY 를 사용하지 못한다.
+---
+
+***서브쿼리가 사용 가능한 곳
+
+1. SELECT 절
+
+2. FROM 절
+
+3. WHERE 절
+
+4. HAVING 절
+
+5. ORDER BY 절
+
+6. INSERT 문의 VALUES 절
+
+7. UPDATE 문의 SET 절
+---
+
+## WHERE 절
+
+***단일 행 서브쿼리
+
+	서브 쿼리가 단일 행 비교 연산자(=, <, >, <=, >=, <>)와 함께할 때는 서브쿼리 결과 건수가 반드시 1개 이하여야 합니다.
+	만약 결과가 2건 이상일 경우 오류가 발생합니다.
+
+```
+SELECT C1, C2, C3
+FROM T1
+WHERE C1 = (SELECT C1
+            FROM T2
+            WHERE C2 = '3')
+ORDER BY C1, C2, C3;
+
+잘못 설계한 SQL문일 가능성이 높다
+```
+
+```
+그룹 함수를 사용한 쿼리
+
+SELECT C1, C2, C3
+FROM T1
+WHERE C1 <= (SELECT AVG(C1)
+            FROM T2
+            WHERE C2 = '3')
+ORDER BY C1, C2, C3;
+
+단일 행 서브쿼리로 적합하다.
+```
+---
+
+***다중 행 서브쿼리**
+- 서브 쿼리의 결과가 2건 이상 반환될 수 있으면 반드시 다중 행 비교 연산자(IN, ALL, ANY, SOME)와 함께 사용해야 한다.
+
+|다중 행 연산자|설명|
+|------|---|
+|IN|서브쿼리의 결과에 존재하는 임의의 값과 동일한 조건|
+|ALL|서브쿼리의 결과에 존재하는 모든 값을 만족하는 조건(AND)|
+|ANY|서브쿼리의 결과에 존재하는 어떤 하나의 값이라도 만족하는 조건 (OR)|
+|EXISTS|서브쿼리의 결과를 만족하는 값이 존재하는지 여부를 확인하는 조건|
+
+---
+
+***다중 컬럼 서브쿼리
+	- 서브 쿼리의 결과값이 여러개의 컬럼이 반환되어 메인 쿼리의 조건과 동시에 비교하는 것을 의미한다.
+	
+```
+SELECT C1, C2, C3
+FROM T1
+WHERE (C1, C2) IN (SELECT C1, C2
+                   FROM T2
+                   WHERE C2 = '3')
+ORDER BY C1, C2, C3;
+```
+
+---
+***연관 서브쿼리
+	-서브 쿼리 내에 메인쿼리 컬럼이 사용된 서브쿼리이다.
+```
+SELECT T1.C1, T1.C2, T1.C3 FROM T1 T1 WHERE (T1.C1, T1.C2) IN (SELECT T2.C1, T2.C2 FROM T2 T2 WHERE T2.C2 = T1.C2) -- 메인 쿼리의 컬럼을 서브쿼리에 사용 
+ORDER BY T1.C1, T1.C2, T1.C3;
+```
+
+---
+## Select절(스칼라 서브쿼리)
+
+	- 스칼라 서브쿼리는 한 행, 한 컬럼만을 반환하는 서브쿼리
+
+```
+SELECT T1.C1, (SELECT AVG(T2.C1) FROM T2 T2)
+FROM T1 T1;
+```
+---
+## FROM절(인라인 뷰)
+
+	- 인라인 뷰는 SQL 문이 실행될 때만 임시적으로 생성되는 동적인 뷰이기 때문에 데이터베이스에 해당 정보가 저장되지 않는다.
+	- 인라인 뷰는 동적으로 가상의 테이블을 만들어 조인 방식을 사용하는 것과 같다
+
+```
+SELECT T1.C1, T2.C1, T2.C2
+FROM T1 T1,
+     (SELECT C1, C2 FROM T2) T2
+WHERE T1.C1 = T2.C1;
+```
+
+---
+## HAVING절
+
+	- 그룹함수와 함께 사용될 때 그룹핑된 결과에 대해 부가적인 조건을 주기 위해 사용합니다.
+
+```
+SELECT T1.C1, T2.C1, T2.C2 FROM T1 T1, T2 T2 WHERE T1.C1 = T2.C1 GROUP BY T1.C1, T2.C1, T2.C2 HAVING AVG(T1.C1) < (SELECT AVG(C1) FROM T2 );
+```
+
+---
+
+## Update문
+
+```
+UPDATE T1 T1
+   SET T1.C1 = (SELECT T2.C3 FROM T2 T2 WHERE T2.C1 = T1.C1);
+```
+
+---
+
+## Insert문
+
+```
+INSERT INTO T1 (C1, C2, C3) SELECT C1, C2, C3 FROM T2;
+
+INSERT INTO T1 (C1, C2, C3) VALUES ((SELECT C1 FROM T2), (SELECT C2 FROM T2), (SELECT C3 FROM T2));
+```
+
+
+
+
 
