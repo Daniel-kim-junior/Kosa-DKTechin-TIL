@@ -1,55 +1,5 @@
-### 주요 유형 참조 방식 3가지
+# 제네릭
 
-1. ***강한 참조 (Strong Reference) - 자바의 기본 객체 메모리 참조 구조
-```
-MyClass obj = new MyClass();
-```
-*obj 변수가 참조를 가지고 있는 한, MyClass 객체는 GC 대상이 되지 않습니다.*
-
-![image](https://user-images.githubusercontent.com/67178562/226343496-46f1887a-fd3b-4092-b7ed-6d3b3820539d.png)
-
-2. **부드러운 참조 (Soft Reference) - 대상 객체를 참조하는 경우가 SoftReference 객체만 존재하는 경우 GC의 대상이 됩니다.
-```
-MyClass ref = new MyClass(); 
-SoftReference<MyClass> softRef = new SoftReference<MyClass>(ref); 
-
-// 이 시점에 GC의 실행 대상이 가능 
-ref = null; 
-
-// JVM의 메모리가 부족하지 않아 GC 실행 대상이 되지 않은 경우 
-// null이 반환되지 않고 기존 객체가 반환됨 ref = softRef.get();
-```
-![image](https://user-images.githubusercontent.com/67178562/226343550-6ff45ee7-9f94-4a9a-8498-ffd5d1430257.png)
-
-
-***대상 객체를 참조하는 경우가 SoftReference 객체만 존재하는 경우 GC의 대상이 됩니다.  
-단, JVM의 메모리가 부족한 경우에만 힙영역에서 제거되고 메모리가 부족하지 않다면 굳이 제거하지 않습니다.
-
-
-
-4. ***약한 참조(Weak Reference) 
-```
-MyClass ref = new MyClass(); 
-WeakReference<MyClass> weakRef = new WeakReference<MyClass>(ref); 
-
-// 이 시점에 GC의 실행 대상이 가능 
-ref = null; 
-
-// 다음 GC 실행시 무조건 힙 메모리에서 제거 
-// 제거된 경우 null 반환 
-ref = softRef.get();
-```
-![image](https://user-images.githubusercontent.com/67178562/226343586-23ae22c7-b883-4e45-a7a5-6543cbca88a2.png)
-
-
-**대상 객체를 참조하는 경우가 WeakReferences 객체만 존재하는 경우 GC의 대상이 됩니다.  
-다음 GC 실행시 무조건 힙 메모리에서 제거됩니다.  
-
-(톰캣 컨테이너의 ConcurrentCache class에서 WeakHashMap을 사용 중)
-
-
-
----
 
 ### 제네릭 메소드(Generic Method)
 
@@ -134,26 +84,6 @@ class Student<T>{
 ---
 
 
-### LinkedList의 동작 방식
 
-- Double Linked List
-
----
-### Collections methods
-
----
-### Iterator, forEach, stream
-
----
-### File, URL, 표준 입출력, byteStream -> String
-
----
-### JSON vs xml
-
----
-### Inner Class
-
----
-### JDBC (Java Database Connectivity)
 
 
