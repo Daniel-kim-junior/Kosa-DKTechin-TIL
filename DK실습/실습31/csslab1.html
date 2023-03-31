@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0px;
+      padding: 0px;
+    }
+    header {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 10px;
+      height: 300px;
+      width: 500px;
+      background: rgb(2,0,36);
+      background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+      color: antiquewhite;
+      position: relative;
+    }
+    #img-container {
+      margin-left: auto;
+      margin-right: auto;
+      height: 500px;
+      width: 1000px;
+    }
+    table {
+      margin: auto;
+    }
+    #title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    img {
+      width: 200px;
+      height: 200px;
+      padding: 20px;
+      margin: 10px;
+      border: 1px solid black;
+      box-shadow: 10px 10px 10px rebeccapurple;
+      opacity: 1.0;
+    }
+    img:hover {
+      opacity: 0.3;
+    }
+    #title {
+      font-size: 50px;
+      white-space: nowrap;
+    }
+    #weather {
+      color: pink;
+    }
+  </style>
+</head>
+<body>
+    <header>
+      <div id="title">
+        <span id="weather">날씨</span>
+        <span>의 종류</span>
+      </div>
+    </header>
+    <hr>
+    <main>
+      <section>
+        <div id="img-container">
+          <table>
+            <tr>
+              <td><img src="../images/sun.png" alt=""></td>
+              <td><img src="../images/rain.png" alt=""></td>
+              <td><img src="../images/cloud.png" alt=""></td>
+            </tr>
+            <tr>
+              <td><img src="../images/cloud_sun.png" alt=""></td>
+              <td><img src="../images/snow.png" alt=""></td>
+              <td><img src="../images/etc.png" alt=""></td>
+            </tr>
+          </table>
+        </div>
+      </section>
+    </main>
+</body>
+</html>
