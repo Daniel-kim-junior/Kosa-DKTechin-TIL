@@ -62,7 +62,34 @@ Log에 Write 및 Read를 수행
                       TopicB Partition 1
     이런식으로 위치하는데 최적의 구조로 카프카 내부의 알고리즘으로 지정된다.
 
+## Kafka Producer
+    - 메시지를 생산(Produce)해서 Kafka의 Topic으로 메시지를 보내는 어플리케이션
+    - Producer와 Consumer는 서로 알지 못함!!
+    - 각각 고유의 속도로 Commit Log에 Write와 Read를 수행
     
+    ### Producer가 만들어내는 것
+        - Message == Record == Event == Data
+        Headers : Topic, Partition, TimeStamp, etc - MetaData (어떤 Topic and Partition...)
+        Key-Value: Body Business Relevant Data (내용 : Avro, String JSON, ProtoBuffer 등 다양한 형태)
+        - 카프카는 수동적인 소프트웨어이기 때문에 개발자가 요청을 해야함
+        카프카의 데이터 저장 방식은 Byte Array(Record -> Serializers -> Byte Array)
+        Key와 Value 각각 다른 Serializer를 사용 할 수 있다.
+        Compress 옵션 사용 가능
+        Partitioner는 레코드를 어떤 파티션으로 보낼지 결정하는 라이브러리(key-해시 알고리즘으로 파티션에 배치 전제조건 : key가 null이 아닐때)
+        
+        Default Partitioner : 전제조건 key가 null일 때
+        - kafka 2.4 이전에는 Round-Robin 정책
+        - 이후에는 Sticky 정책 (배치가 닫힐때까지 하나의 파티션에 우겨넣음 후엔 랜덤하게 파티션 지정 후 반복)
+        - Partitioner는 개발해서 교체 가능
+        
+        
+
+## Kafka Consumer
+    - Topic의 메시지를 가져와서 소비(Consume)하는 어플리케이션
+
+## Consumer Group
+    - Topic의 메시지를 사용하기 위해 협력하는 Consumer의 집합(협력 병렬처리)
+    - 하나의 Consumer는 하나의 Consumer Group에 포함된다.
 
 
 
