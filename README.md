@@ -63,4 +63,5 @@
 ## DK실습
   - 실습 수행 코드들을 모아놓은 폴더
   
-  
+## Client
+  - HTML, CSS, JavaScript, etc...
