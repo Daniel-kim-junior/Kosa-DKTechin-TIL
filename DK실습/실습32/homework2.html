@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body {
+            margin: 0;
+            max-height: 100%;
+        }
+        table * {
+            border: 1px solid black;
+        }
+        figcaption {
+            margin-bottom: 10px;
+        }
+        section {
+            width: 800px;
+            height: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 30px;
+        }
+        article {
+            border: 4px solid blueviolet;
+            border-radius: 5px;
+            margin-top: 50px;
+        }
+        h3 {
+            color: blanchedalmond;
+        }
+        header {
+            text-align: center;
+            background: linear-gradient(white, yellow);
+        }
+        .marginDiv {
+            margin: 20px;
+        }
+
+        img {
+           display: block;
+           width: 100%;
+        }
+        img:hover {
+            opacity: 0.5;
+        }
+        iframe {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        aside {
+            display: block;
+            width: 800px;
+            height: 0%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10%;
+        }
+        #img_title, em {
+            display: block;
+            text-align: center;
+        }
+        em {
+            background-color: black;
+            color: aliceblue;
+        }
+        a {
+            margin: 100px;
+        }
+        a:hover {
+            font-weight: bold;
+        }
+        h1 {
+            text-shadow: 1px 1px 2px black;
+        }
+        #our_place {
+            color: black;
+        }
+        h3 {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>김민성의 HTML5 학습</h1>
+        <nav>
+            <a href="https://www.w3.org/">W3C</a>&nbsp;
+            <a href="https://www.w3schools.com/">W3CSCHOOLS</a>&nbsp;
+            <a href="https://jquery.com/">JQuery</a>
+        </nav>
+    </header>
+   
+    <section>
+        <article>
+            <div class="marginDiv">
+                <h3>나의 소개</h3>
+                    <ul>
+                        <li>이름 : 김민성</li>
+                        <li>별명 : 한량</li> 
+                        <li>관심기술 : Spring Cloud</li>
+                        <li>취미 : Sleep</li>
+                    </ul>
+            </div>
+        </article>
+        <article>
+            <div class="marginDiv">
+                <table>
+                    <thead>
+                        <h3>올해 재미있게 읽은 책</h3>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                제목
+                            </th>
+                            <th>
+                                장르
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                이펙티브 자바
+                            </td>
+                            <td>
+                                자바
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td>
+                                클라우드 네이티브 자바
+                            </td>
+                            <td>
+                                자바
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                토비의 스프링 3.1
+                            </td>
+                            <td>
+                                자바
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+        <article>
+            <div class="marginDiv">
+                <h3>자랑하고 싶은</h3>
+                <h3 id="our_place">우리동네</h3>
+                <h3>의 아름다운 곳</h3>
+            </div>
+            <figure>
+                   <figcaption>Jinhae의 로망스다리 그곳은 매우 아름답다고 한다. 봄에는 관광객으로 넘쳐나며 커플들의 데이트 코스로 제격인 곳이다.</figcaption>
+                <img src="../images/festival_gallery03.jpg">
+                <figcaption id="img_title">진해의 절경</figcaption>
+            </figure>
+        </article>
+    </section>
+    <aside>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/fuMbPDntt0U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </aside>
+    <footer>
+        <em>
+            이 문서는 김 민성에 의해 HTML5와 CSS3 기술을 사용하여 2020년 1월 3일에 작성하였습니다. (ver 1.0)
+        </em>
+    </footer>
+</body>
+</html>
