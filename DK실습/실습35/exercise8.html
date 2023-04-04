@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <script src="util.js"></script>
+    <script>
+      function printH1(content) {
+        let rst = '';
+        content.forEach(function(e) {
+          rst += e + " ";
+        });
+        write(rst, "h1");
+      }
+
+      function printH4(content) {
+        let rst = '';
+        content.forEach(function(e) {
+          rst += e + " ";
+        });
+        write(rst, "h4");
+      }
+
+      function apply(...args) {
+        if(args.length !== 2 || 
+        !Array.isArray(args[0]) || 
+        typeof args[1] !== "function") {
+          console.log('아규먼트 오류');
+          return false;
+        }
+        args[1](args[0]);
+        return true;
+      } 
+      const arr = [];
+      while(1) {
+        const data = prompt("데이터를 입력하시오. (숫자, 문자 anything)");
+        if(data === null) break;
+        arr.push(data);
+      }
+      const rand = Math.floor(Math.random() * 10) + 1;
+      console.log(rand);
+      let flag;
+      if(rand === 1 || rand === 4 || rand === 6) {
+        flag = apply(arr, printH1);
+      }
+      else if(rand === 3 || rand === 5 || rand === 7) {
+        flag = apply(arr, printH4);
+      }
+      else if(rand === 8 || rand === 9) {
+        flag = apply("ㅋㅋ", printH1);
+      }
+      else {
+        flag = apply(arr);
+      }
+      flag ? alert("처리 성공") : alert("처리 실패");
+    </script>
+</body>
+</html>

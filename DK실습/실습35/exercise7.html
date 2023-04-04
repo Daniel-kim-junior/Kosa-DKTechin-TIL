@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="util.js"></script>
+  <script>
+    function cal() {
+      if(arguments.length == 0) return 0;
+      
+      const numMessage = "숫자만 입력하세요";
+      let rst = 0;
+      let tmp;
+      for(let i in arguments) {
+        tmp = Number(arguments[i]);
+        if(isNaN(tmp)) return numMessage;
+        rst += tmp;
+      }
+      return rst;
+    }
+    write(cal(), 'h3');
+    write(cal(10, 20, '30'), 'h3');
+    write(cal(10, '가나다', 20), 'h3');
+    write(cal(1, 2, 3, 4, 5), 'h3');
+    
+    
+  </script>
+</body>
+</html>

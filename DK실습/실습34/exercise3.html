@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  
+</head>
+<body>  
+  <script src="util.js"></script>
+  <script>
+    writeColor("자바스크립트 실습(3)", "h1", "blue");
+    const num = window.prompt("숫자를 입력하세요");
+    if(num == null || num == '') {
+      write("비어있는 입력", "h3");
+    } else if(!isNaN(Number(num))) {
+      const x = Number(num);
+      write(`1부터 ${num}까지의 합은 ${x * (x + 1) / 2}`, "h2");
+    } else {
+      write(num, "h3");
+    }
+  </script>
+</body>
+</html>

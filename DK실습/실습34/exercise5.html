@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  * {
+    list-style-type: circle;
+  }
+</style>
+<body>
+  <script src="util.js"></script>
+  <script>
+    writeColor('자바스크립트 실습(5)', "h1", "blue");
+    function getMaxValue(array) {
+      let x = 0;
+      array.forEach(function (number) {
+        if(x < number) x = number;
+      });
+      return x;
+    }
+    function getMinValue(array) {
+      let x = 99999999;
+      array.forEach(function (number) {
+        if(x > number) x = number;
+      });
+      return x;
+    }
+
+    function getSum(array) {
+      let x = 0;
+      array.forEach(function (number) {
+        x += number;
+      });
+      return x;
+    }
+
+    function getCountOddNum(array) {
+      let count = 0;
+      array.forEach(function (number) {
+        number % 2 == 1 ? count++ : count;
+      });
+      return count;
+    }
+
+    function getCountEvenNum(array) {
+      let count = 0;
+      array.forEach(function (number) {
+        number % 2 == 0 ? count++ : count;
+      });
+      return count;
+    }
+
+
+
+    const array = [10, 5, 7, 21, 4, 8, 18];    
+   
+    writeColor("모든 원소의 합 : " + getSum(array), "h2", "red");
+    const dom = `<li>- 최대값 : ${getMaxValue(array)}</li>
+                <li>- 최소값 : ${getMinValue(array)}
+                  <li>- 짝수의 갯수 : ${getCountEvenNum(array)}
+                    <li>- 홀수의 갯수 : ${getCountOddNum(array)}`
+    write(dom, "ul");
+    
+
+
+  </script>
+</body>
+</html>

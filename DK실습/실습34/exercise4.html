@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="util.js"></script>
+  <script>
+    writeColor("자바스크립트 실습(4)", "h1", "red");
+    function sum(num) {
+      if(!num) {
+        write("결과값이 없어요!!", "h3");
+        return;
+      }
+      const x = Number(num);
+      return x * (x + 1) / 2;
+    }
+    let ran;
+    let rst;
+    for(let i = 0; i < 5; i++) {
+      ran = Math.floor(Math.random() * 6);
+      if(ran === 0) {
+        sum();
+      } else {
+        write("호출 결과값 : " + ran, "h2");
+      }
+    }
+  </script>
+</body>
+</html>
