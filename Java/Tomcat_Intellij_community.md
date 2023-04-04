@@ -25,8 +25,8 @@
 3. deployment directory : Tomcat이 웹 어플리케이션을 배포하는데 사용하는 디렉토리 설정 web project인 경우 src/main 안에 있는 webapp 폴더를 선택 (배포를 위해)
 maven이나 gradle을 사용하는 경우 프로젝트 루트 폴더를 선택
 
-- 4. Context Path : Context Url 설정
+4. Context Path : Context Url 설정
 
-- 5. Port 설정
+5. Port 설정
                       
 
