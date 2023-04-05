@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="util.js"></script>
+  <script>
+    function printObject(p) {
+      if(typeof p !== "object") return;
+      writeColor(p.msg, p.tag, p.color);
+    }
+    function makeObject(tag, msg, color) {
+      const obj = {};
+      obj['tag'] = tag;
+      obj['msg'] = msg;
+      obj['color'] = color;
+
+      return obj;
+    }
+    const attr = [["h1", "blue"], ["h2", "red"], ["h3", "black"], ["h4", "orange"], ["h5", "yellow"]];
+    for(let i = 0; i < 5; i++) {
+      printObject(makeObject(attr[i][0], "hi" + i, attr[i][1]));
+    }
+  </script>
+</body>
+</html>

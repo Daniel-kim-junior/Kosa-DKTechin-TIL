@@ -21,7 +21,6 @@
 
 
 ```
-
 @Inheritance(strategy = InheritanceType.XXX)
 
   - Joined : 조인 전략 테이블 생성 (비지니스 적으로 중요하고 복잡하면)

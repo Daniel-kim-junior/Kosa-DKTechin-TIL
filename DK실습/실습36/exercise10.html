@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="util.js"></script>
+  <script>
+    const today = new Date();
+    const dayofWeek = ['일', '월', '화', '수', '목', '금', '토'];
+    function DayInfo(name, year, month, day) {
+      this.name = name;
+      this.year = year;
+      this.month = month;
+      this.day = day;
+    }
+    DayInfo.prototype.getTotalDates = function() {
+      const birth = new Date(this.year, this.month - 1, this.day);
+      let diff = (today.getTime() - birth.getTime()) / (1000*60*60*24) ;; 
+      return `${this.name}님은 태어난지 ${Math.floor(diff)}일 되었어요.`;
+    }
+    DayInfo.prototype.getKorDay = function() {
+       const birth = new Date(this.year, this.month - 1, this.day);
+       const dat = dayofWeek[birth.getDay()];
+       return `${this.name}님은 ${dat}요일에 태어났어요.`;
+    }
+    const d1 = new DayInfo('김민성', 1994, 1, 17);
+    const d2 = new DayInfo('홍길동', 2023, 4, 5); 
+    const d3 = new DayInfo('홍감자', 2011, 1, 11);
+    
+    writeColor(d1.getTotalDates(), 'h3', 'black');
+    writeColor(d1.getKorDay(), 'h3', 'black');
+    
+    writeColor(d2.getTotalDates(), 'h3', 'red'); 
+    writeColor(d2.getKorDay(), 'h3', 'red'); 
+
+    writeColor(d3.getTotalDates(), 'h3', 'green');
+    writeColor(d3.getKorDay(), 'h3', 'green');
+
+  </script>
+</body>
+</html>
