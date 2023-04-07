@@ -7,9 +7,11 @@
 </head>
 <body>
   <header style="text-align: center;">
-    <h1>HTML5 API 실습</h1>
+    <h1>김민성의 HTML5 API 실습</h1>
   </header>
   <main>
+    <!-- 로딩 스피너 요소 -->
+    <div id="loading-spinner"></div>
     <section id="btn-container" style="text-align: center; margin: 5rem;">
       <button value="save" style="margin: 10px">저장하기</button>
       <button value="remove" style="margin: 10px">삭제하기</button>
@@ -25,6 +27,7 @@
     let canvas;
     let context;
     let rect;
+    // 시작
     function start() {
       context.clearRect(0, 0, 1000, 500);
       context.beginPath();
@@ -34,15 +37,27 @@
       context.stroke();
     }
 
+    // returns true if all color channels in each pixel are 0 (or "blank")
+    function isCanvasBlank() {
+      return context
+        .getImageData(0, 0, canvas.width, canvas.height).data
+        .some(channel => channel !== 0);
+    }
 
+    // 저장
     function saveData() {
       if(!localStorage) {
         alert("로컬 스토리지를 지원하지 않는 브라우저입니다.");
       } else {
-        localStorage.setItem("canvas", canvas.toDataURL());
+        if(isCanvasBlank()) {
+          localStorage.setItem("canvas", canvas.toDataURL());
+        } else {
+          alert('비어 있어서 저장할 수 없습니다.');
+        }
       }
-    }
+    } 
 
+    // 읽기
     function readData() {
       if(!localStorage) {
         alert("로컬 스토리지를 지원하지 않는 브라우저입니다.");
@@ -55,119 +70,124 @@
       }
     }
 
+    // 제거하기
     function removeData() {
       if(!localStorage) {
         alert("로컬 스토리지를 지원하지 않는 브라우저입니다.");
       } else {
-          
+        if(localStorage.canvas) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          alert("저장하지 않았습니다.");
+        }
       }
     }
 
-    function makePicture() {
-      let elem = document.getElementById('img-container');
-      canvas = elem.getContext('2d');
-      canvas.fillStyle = '#f7d71c';
-      canvas.lineWidth = 3;
-      canvas.fillRect(0, 0, 580, 450);
+    // 라이언
+    function makeLion() {
+      context.fillStyle = '#f7d71c';
+      context.lineWidth = 3;
+      context.fillRect(0, 0, 580, 450);
       
-      canvas.beginPath();
-      canvas.strokeStyle = '#292b19';
-      canvas.arc(210, 30, 20, 9, Math.PI*2.5, false);
-      canvas.fillStyle = '#eea02e';
-      canvas.fill();
-      canvas.stroke();
+      context.beginPath();
+      context.strokeStyle = '#292b19';
+      context.arc(210, 30, 20, 9, Math.PI*2.5, false);
+      context.fillStyle = '#eea02e';
+      context.fill();
+      context.stroke();
 
-      canvas.beginPath();
-      canvas.arc(90, 30, 20, 20, Math.PI*2, false);
-      canvas.fillStyle = '#eea02e';
-      canvas.fill();
-      canvas.stroke();
+      context.beginPath();
+      context.arc(90, 30, 20, 20, Math.PI*2, false);
+      context.fillStyle = '#eea02e';
+      context.fill();
+      context.stroke();
 
-      canvas.beginPath();
-      canvas.arc(150, 100, 90, 0, Math.PI*2, false);
-      canvas.fillStyle = '#eea02e';
-      canvas.fill();
-      canvas.stroke();
+      context.beginPath();
+      context.arc(150, 100, 90, 0, Math.PI*2, false);
+      context.fillStyle = '#eea02e';
+      context.fill();
+      context.stroke();
 
       // 새로운 경로 시작
-      canvas.beginPath();
-      canvas.moveTo(90, 60);
+      context.beginPath();
+      context.moveTo(90, 60);
 
       // 선의 끝점 지정
-      canvas.lineTo(130, 60);
+      context.lineTo(130, 60);
       // 선 그리기
-      canvas.stroke();
+      context.stroke();
 
 
       // 새로운 경로 시작
-      canvas.beginPath();
-      canvas.moveTo(165, 60);
+      context.beginPath();
+      context.moveTo(165, 60);
 
       // 선의 끝점 지정
-      canvas.lineTo(210, 60);
+      context.lineTo(210, 60);
       // 선 그리기
-      canvas.stroke();
+      context.stroke();
 
-      canvas.beginPath();
-      canvas.arc(110, 80, 5, 0, Math.PI*2, false);
-      canvas.fillStyle = '#000000';
-      canvas.fill();
-      canvas.stroke();
+      context.beginPath();
+      context.arc(110, 80, 5, 0, Math.PI*2, false);
+      context.fillStyle = '#000000';
+      context.fill();
+      context.stroke();
       
 
-      canvas.beginPath();
-      canvas.arc(185, 80, 5, 0, Math.PI*2, false);
-      canvas.fillStyle = '#000000';
-      canvas.fill();
-      canvas.stroke();
+      context.beginPath();
+      context.arc(185, 80, 5, 0, Math.PI*2, false);
+      context.fillStyle = '#000000';
+      context.fill();
+      context.stroke();
 
 
-      canvas.beginPath();
-      canvas.arc(145, 103, 5, 0, Math.PI*2, false);
-      canvas.fillStyle = '#000000';
-      canvas.fill();
-      canvas.stroke();
+      context.beginPath();
+      context.arc(145, 103, 5, 0, Math.PI*2, false);
+      context.fillStyle = '#000000';
+      context.fill();
+      context.stroke();
 
 
-      canvas.beginPath();
-      canvas.arc(130, 110, 12, 0, Math.PI*2, false);
-      canvas.fillStyle = '#f7f7f7';
-      canvas.stroke();
+      context.beginPath();
+      context.arc(130, 110, 12, 0, Math.PI*2, false);
+      context.fillStyle = '#f7f7f7';
+      context.fill();
+      context.stroke();
 
-      canvas.beginPath();
+      context.beginPath();
       
-      canvas.arc(160, 110, 12, 0, Math.PI*2, false);
-      canvas.fillStyle = '#f7f7f7';
-      canvas.fill();
-      canvas.stroke();
+      context.arc(160, 110, 12, 0, Math.PI*2, false);
+      context.fillStyle = '#f7f7f7';
+      context.fill();
+      context.stroke();
 
 
-      canvas.save();
+      context.save();
     }
 
     
-    
+    // btn 이벤트리스너
     btns.addEventListener('click', function(e) {
       if(e.target.value) {
         if(e.target.value == 'read') {
           readData();
-        }
-        if(e.target.value == 'remove') {
+        } else if(e.target.value == 'remove') {
           removeData();
-        }
-        if(e.target.value == 'save') {
+        } else if(e.target.value == 'save') {
           saveData();
         }
 
       }
     })
+
     
+    // 로드
     document.body.onload = function() {
       canvas = document.getElementById("img-container");
       context = canvas.getContext("2d");
       rect = canvas.getBoundingClientRect();
       start();
-      makePicture();
+      makeLion();
     } 
 
 
