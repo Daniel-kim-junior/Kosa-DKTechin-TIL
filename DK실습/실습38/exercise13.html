@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <header style="text-align: center;">
+    <h1>이벤트 처리 실습</h1>
+  </header>
+  <main>
+    <hr>
+      <section id="weather-btns" style="text-align: center; margin-left: auto; margin-right: auto; width: 500px; height: 100%; border: 1px solid black;">
+      </section>
+    <hr>
+      <section id="weather-img" style="text-align: center;">
+      </section>
+  </main>
+</body>
+<script>
+  const btnContainer = document.querySelector("#weather-btns");
+  const weatherContainer = document.querySelector("#weather-img");
+  const btnArray = ["맑음", "흐림", "비"];
+
+  
+  function makeButtons() {
+    let btns = '';
+    for(let i = 0; i < 3; i++) {
+      btns += `<button style="margin: 3em; cursor: pointer">${btnArray[i]}</button>`
+    }
+    btnContainer.innerHTML = btns; 
+  }
+  
+  btnContainer.addEventListener('click', function(e) {
+    if(e.target.textContent === btnArray[0]) {
+      weatherContainer.innerHTML = `<img src='sun.png'/>`
+    } else if(e.target.textContent === btnArray[1]) {
+      weatherContainer.innerHTML = `<img src='cloud.png'/>`
+    } else if(e.target.textContent === btnArray[2]) {
+      weatherContainer.innerHTML = `<img src='rain.png'/>`
+    }
+  })
+  makeButtons();
+
+</script>
+
+</html>

@@ -51,7 +51,7 @@ KMP는 접두사와 접미사의 개념을 활용하여 모든 경우를 계산�
 
 2. ex) abacaaba - a : 0, ab : 0, aba : 1, abac : 0, abaca: 1, abacaa: 1, abacaab: 2, abacaaba : 3
   - 연속된 글자가 같으면 idx++ , table[i]를 idx로 갱신(무조건 제일 긴 길이라서)
-  - idx > 0일때 즉 같은 문자가 존재할때   
+  - idx > 0일때 즉 같은 문자가 존재할때  i + idx와 i번째 문자가 다르면 table에기록된 최고로 긴 부분 문자열로 갱신
 
 
 
