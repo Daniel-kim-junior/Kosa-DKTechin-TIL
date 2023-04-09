@@ -44,12 +44,12 @@ Request, Response는 클라이언트마다 다르니 요청마다 생성
 
 다중 요청을 위해 멀티 쓰레드 지원하는 WAS
 
-\*장점 :
+*장점 :
 동시 요청 처리 가능
 리소스(CPU, 메모리) 허용까지 가능
 하나의 쓰레드가 지연 되어도, 나머지 쓰레드는 정상 동작
 
-\*단점:
+*단점:
 쓰레드 생성 비용이 비싸다
 고객의 요청이 올 때마다 쓰레드를 생성하면, latency 저하
 쓰레드는 컨텍스트 스위칭 비용이 발생
@@ -78,7 +78,7 @@ HttpServletRequest 객체의 역할
 
 HttpServletRequest를 사용하면 다음과 같은 HTTP 요청 메시지를 편리하게 조회 할 수 있다.
 
-\*\* HTTP 요청 메시지
+** HTTP 요청 메시지
 
 ```
 POST /save HTTP/1.1
@@ -101,15 +101,76 @@ username=kim&age=20
 
 HttpServletRequest 객체는 추가적으로 여러가지 부가기능도 함께 제공한다.
 
-\*\* 임시 저장소 기능
+** 임시 저장소 기능
 
 - 해당 HTTP 요청이 시작부터 끝날 때까지 유지되는 임시 저장소 기능
   - 저장 : `request.setAttribute(name, value)`
   - 조회 : `request.getAttribute(name)`
 
-\*\* 세션 관리기능
+** 세션 관리기능
 
 - request.getSession(create: true)
 
-\*\*\* 중요
+*** 중요
 HttpServletRequest, HttpServletResponse를 사용할때 가장 중요한 점은 이 객체들이 HTTP요청 메시지, HTTP응답 메시지를 편리하게 사용하도록 도와주는 객체라는 점이다. 따라서 이 기능에 대해서 깊이있는 이해를 하려면 HTTP 스펙이 제공하는 요청, 응답 메시지 자체를 이해 해야한다.
+
+
+### get 복수 파라메터 처리
+
+```
+복수 파라메터 (ex) username=kim, username=han) 등의 중복으로 key를 보내올때
+reques.getParameterValues()로 값을 받아야 데이터 손실이 없다.
+중복일때 getParameter를 사용하면 첫 번째 값을 반환한다.
+```
+
+### FORM Data 처리
+
+content-type : application/x-www-form-urlencode
+message body : username=hello&age=20
+
+Get에서 살펴본 쿼리 파라미터 형식과 같다. 따라서 쿼리 파라미터 조회 메서드를 그대로 사용하면 된다.
+
+서버 입장에서는 둘의 형식이 동일하기 때문에 같은 메서드로 request를 조회하면된다
+
+
+### 정리
+content-type은 HTTP 메시지 바디의 데이터 형식을 지정한다.
+GET URL 쿼리 파라미터 형식으로 클라이언트에서 서버로 데이터를 전달할 때는 HTTP 메시지 바디를 사용하지 않기
+때문에 content-type이 없다.
+POST HTML Form 형식으로 데이터를 전달하면 HTTP 메시지 바디에 해당 데이터를 포함해서 보내기 때문에 바디에
+포함된 데이터가 어떤 형식인지 content-type을 꼭 지정해야 한다.
+
+---
+
+### Body에 text로 데이터 전송
+
+- request.getInputStream()으로 바이트스트림으로 값이 들어오게 되는데 이것을
+String으로 변환하는 작업을 해주어야 함 StreamUtils 같은 스프링에서 제공해주는 것을 썼다
+
+ServletInputStream inputStream = request.getInputStream();
+
+String messageBody = StreamUtils.copyString(inputStream, StandardCharsets.UTF_8);
+이런식으로 문자를 -> byte, byte -> 문자로 변환해줄때는 encoding 형식을 꼭 명시해야한다.
+
+---
+
+### Body에 JSON으로 데이터 전송
+
+- 요새 표준으로 채택된 JSON...
+
+- content-type: "application/json"
+- message body : {"username": "hello", "age" : 20}
+- ObjectMapper로 만들어 놓은 VO로 JSON to Object 변환(Jackson 라이브러리)
+
+```
+application/json 은 스펙상 utf-8 형식을 사용하도록 정의되어 있다.
+그래서 스펙에서 charset=utf8과 같은 추가 파라미터를 지원하지 않는다.
+따라서 application/json이라고만 사용해야한다.
+response.getWriter()를 사용하면 추가 파라미터를 자동으로 추가해버린다.
+따라서 response.getOutputStream()으로 전송하자
+```
+
+```
+form으로 전송하는것은 POST가 표준 
+Spring은 POST가 아닌 put이나 PATCH를 Post로 변환해서 데이터를 받는 것일 뿐(히든필드)
+```
