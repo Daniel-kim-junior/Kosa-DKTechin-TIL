@@ -138,6 +138,8 @@ public class Josephus_problem {
 엄청나게 시간복잡도가 줄었다
 여기서 끝이 아닌 점화식을 이용하여 풀어보자
 
+### 점화식을 이용한 풀이
+
 ```
 
 import java.io.BufferedReader;
