@@ -174,3 +174,48 @@ response.getWriter()를 사용하면 추가 파라미터를 자동으로 추가�
 form으로 전송하는것은 POST가 표준 
 Spring은 POST가 아닌 put이나 PATCH를 Post로 변환해서 데이터를 받는 것일 뿐(히든필드)
 ```
+
+## MVC 패턴
+
+Model-View-Controller-Service 로 패턴을 나눈다.
+
+기존의 웹 기술은
+Servlet + html -> Servlet + JSP로 이어졌는데
+
+JSP가 너무 많은 로직을 담당하다보니 유지보수가 지옥이였다.
+
+따라서 JSP는 View만 담당하고 Servlet은 Controller를 Service에서 비지니스 로직을 담당하는 식으로
+구조를 바꾸었다
+
+Model은 View와 Controller가 통신하는 일종의 DTO다 request 객체안에는 저장소가 있는데
+
+Service에서 온 데이터를
+setAttribute()로 값을 저장하고 getAttribute()로 View(JSP)에서 데이터를 렌더링한다.
+
+/WEB-INF : 이 경로 안에 JSP가 있다면 외부에서 직접 JSP를 호출할 수 없다. 우리가 기대하는 것은 항상 컨트롤러를 통해서 JSP를 호출하는 것이다.(폴더 구조를 통한 URL 작성 접근 불가)
+
+
+### redirect vs forward
+
+    리다이렉트는 실제 클라이언트(웹 브라우저)에 응답이 나갔다가, 클라이언트가 redirect 경로로 다시 요청한다
+    따라서 클라이언트가 인지할 수 있고, URL 경로도 실제로 변경된다.(화면 깜빡임)
+    반면에 forward는 서버 내부에서 일어나는 호출이기 때문에 클라이언트가 전혀 인지하지 못한다.
+    
+
+
+### 한계
+
+굉장히 많은 중복(viewPath, forward)
+
+데드 코드(Request or Response)
+
+공통처리가 어려움 - 메서드 extract 해서 호출하는 것 또한 중복
+
+코드 변경시 전체 코드를 뜯어 고쳐야하는 문제점
+prefix : /WEB-INF/views/
+suffix : .jsp
+
+
+- 공통처리가 어려운 점(해결책)
+    Front Controller의 패턴의 등장 (수문장 역할 입구를 하나로)
+
