@@ -5,6 +5,10 @@
 - 80번 포트를 사용하는 응용 계층 프로토콜
   인터넷에서 데이터를 주고 받을 수 있는 프로토콜
   HTTP/1.1, HTTp/2.0 등이 있다.
+  
+- Connection Oriented와 Stateless 방식으로 동작하는 프로토콜로서 신뢰성 있는 통신
+TCP 3-HandShake Stateless : response 이후 연결 종료 -> 보다 많은 클라이언트에게 기회를 주기 위해
+(클라이언트의 정보를 보관 X)
 
   구성요소 (Request)
 

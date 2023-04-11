@@ -78,6 +78,13 @@ HttpServletRequest 객체의 역할
 
 HttpServletRequest를 사용하면 다음과 같은 HTTP 요청 메시지를 편리하게 조회 할 수 있다.
 
+
+### Web Server(Application Server) - 기존의 아키텍처 (boot 이전)
+> Web Container > 여러 개의 Web Application
+
+
+
+
 ** HTTP 요청 메시지
 
 ```
@@ -219,3 +226,10 @@ suffix : .jsp
 - 공통처리가 어려운 점(해결책)
     Front Controller의 패턴의 등장 (수문장 역할 입구를 하나로)
 
+### 세션 유지 시간 (브라우저 가동 시간)
+
+- Servlet 객체는 싱글톤 (최초 요청시 생성) Tomcat은 다중 request를 멀티 스레드로 동기적으로 동작함
+init()이 요청 처음에 일어날 action을 구현
+service() Service의 request와 response를 담당
+destroy() - 1. 서버가 죽을 때
+          - 2. 자동 reload 될 때
