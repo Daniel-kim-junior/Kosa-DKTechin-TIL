@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <h2>펜션 예약 서비스</h2>
+    </header>
+    <hr />
+    <section id="form-section">
+      <form action="/edu/reservation" method="post">
+        <div id="rev-name">
+          <span>예약자명 :</span>
+          <input type="text" name="name" />
+        </div>
+        <div id="rev-pass">
+          <span>예약암호 : </span>
+          <input type="text" name="password" />
+        </div>
+        <div id="room-select">
+          <span>룸선택 : </span>
+          <input type="radio" id="1" value="둘리" name="room" />
+          <label for="1">둘리</label>
+          <input type="radio" id="2" value="희동" name="room" />
+          <label for="2">희동</label>
+          <input type="radio" id="3" value="도우너" name="room" />
+          <label for="3">도우너</label>
+          <input type="radio" id="4" value="또치" name="room" />
+          <label for="4">또치</label>
+        </div>
+        <div id="plus-select">
+          <span>추가요청사항 : </span>
+          <input type="checkbox" id="5" name="append" value="바베큐" />
+          <label for="5">바베큐</label>
+          <input type="checkbox" id="6" name="append" value="수영장" />
+          <label for="6">수영장</label>
+          <input type="checkbox" id="7" name="append" value="낚시" />
+          <label for="7">낚시</label>
+          <input type="checkbox" id="8" name="append" value="조식" />
+          <label for="8">조식</label>
+        </div>
+        <div id="rev-date">
+          <div>예약날짜 :</div>
+          <div>
+            <input type="date" name="date" />
+          </div>
+        </div>
+        <br />
+        <div id="rev-btns">
+          <input type="submit" value="보내기" />
+          <input type="reset" value="다시작성하기" />
+        </div>
+      </form>
+    </section>
+  </body>
+</html>
