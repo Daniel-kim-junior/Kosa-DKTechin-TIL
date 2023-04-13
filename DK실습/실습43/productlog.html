@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>원하는 상품을 클릭해주세요!! 마구마구^^</h1>
+      </header>
+      <br />
+      <section id="img-container"></section>
+      <section id="result">
+        선택한 상품 리스트
+        <hr />
+        <article id="result-list"></article>
+        <button id="reset">상품 비우기</button>
+      </section>
+    </main>
+
+    <script>
+      const imgContainer = document.querySelector("#img-container");
+      const result = document.querySelector("#result-list");
+      const remove = document.querySelector("#reset");
+      function createImgElement() {
+        let img;
+        for (let i = 1; i < 11; i++) {
+          img = document.createElement("img");
+          img.id = i;
+          img.src = `./images/${i}.jpg`;
+          img.style.width = "200px";
+          img.style.height = "200px";
+          img.style.margin = "10px";
+          img.style.border = "1px solid black";
+          img.style.cursor = "pointer";
+          imgContainer.appendChild(img);
+        }
+      }
+      function createResult(json) {
+        const str = JSON.parse(json);
+        let ul = "<ul>";
+        let li;
+        Object.keys(str).forEach((key) => {
+          li = `${key} : 상품 ${str[key]}개 <br />`;
+          ul += li;
+        });
+        ul += "</ul>";
+        result.innerHTML = ul;
+      }
+      function removeResult(json) {
+        const str = JSON.parse(json);
+        let ul = "<ul>";
+        let li;
+        Object.keys(str).forEach((key) => {
+          li = `${key} : ${str[key]} <br />`;
+          ul += li;
+        });
+        ul += "</ul>";
+        result.innerHTML = ul;
+      }
+
+      remove.addEventListener("click", (e) => {
+        e.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "/edu/basket");
+        xhr.send();
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            removeResult(xhr.responseText);
+          }
+        };
+      });
+
+      imgContainer.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = e.target;
+        if (!isNaN(target.id)) {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", `/edu/basket?id=${target.id}`);
+          xhr.send();
+          xhr.onload = () => {
+            if (xhr.status === 200) {
+              createResult(xhr.responseText);
+            }
+          };
+        }
+      });
+
+      onload = createImgElement;
+    </script>
+  </body>
+</html>
