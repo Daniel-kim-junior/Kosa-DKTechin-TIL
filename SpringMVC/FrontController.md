@@ -17,3 +17,33 @@
   각 서블릿에 대한 요청이 오면 Interface의 구현체들을 인스턴스화 해서 각 컨트롤러를 실행 시킨다.
 
   참고) 개발할 때는 왠만하면 상대경로
+
+2. Version 2
+
+- View를 분리하여 각각의 Controller가 각자의 View를 return 하게 함
+
+- View는 ViewPath와 forward를 담당함
+
+3. Version 3
+
+- 중복 구현 제거 URL(.jsp, /WEB-INF 등...), 각 컨트롤러들의 http servlet 의존성 제거
+Front Controller에게 ModelView 객체를 리턴하여
+모든 로직이 frontController(viewResolver, ParameterMap 생성 등...)에게 집중
+
+4. Version 4
+
+- 모든 컨트롤러에게 model이라는 map을 뿌려주고 그 모델에 로직 데이터들을 다시 FrontController에게 전송
+- 컨트롤러의 역할이 더 작아짐 return은 string으로만 반환하면 되는 쉬운 패턴 장착
+
+5. Version 5(어댑터 패턴)
+
+- 한 가지 인터페이스에만 의존했던 지난 아키텍처를 조금 더 유연하게 운용하기 위해 핸들러 어댑터를 사용해
+다양한 방식의 컨트롤러(인터페이스)를 처리할 수 있도록 변경
+
+ex) 110V와 220V가 호환 안되는 것을 중간에 어댑터를 둬서 처리하는 예시
+
+핸들러 : 컨트롤러의 이름을 더 넓은 범위의 핸들러로 변경
+어떤 것이든 해당하는 종류의 어댑터만 있으면 다 처리할 수 있음
+
+핸들러 어댑터 : 중간에 어댑터 역할을 하는 객체 다양한 종류의 컨트롤러를 등록해놓고 쓸 수 잇음
+ 

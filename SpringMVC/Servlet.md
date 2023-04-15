@@ -233,3 +233,10 @@ init()이 요청 처음에 일어날 action을 구현
 service() Service의 request와 response를 담당
 destroy() - 1. 서버가 죽을 때
           - 2. 자동 reload 될 때
+          
+ServletContext : 서버가 종료될 때까지 유지, 모든 클라이언트가 공유 ---- application scope
+HttpSession : 브라우저가 기동되어 있는 유지, 클라이언트 별로 ---- session scope
+HttpServletRequest : 요청 동안 유지, 클라이언트 별로 ---- request scope
+
+param - http parameter
+PageConetxt ------- page scope
