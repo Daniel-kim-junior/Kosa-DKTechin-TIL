@@ -47,3 +47,38 @@ ex) 110V와 220V가 호환 안되는 것을 중간에 어댑터를 둬서 처리
 
 핸들러 어댑터 : 중간에 어댑터 역할을 하는 객체 다양한 종류의 컨트롤러를 등록해놓고 쓸 수 잇음
  
+
+
+### Spring MVC에서의 이름
+
+- FrontController -> DispatcherServlet
+
+- handlerMappingMap -> HandlerMapping
+
+- MyHandlerAdapter -> HandlerAdapter
+
+- ModelView -> ModelAndView
+
+- viewResolver -> ViewResolver
+
+- MyView -> View
+
+
+
+*** Spring MVC는 HandlerMapping (RequestMapping 방식, beanNameUrl 방식 등으로 HandlerMapping List를 추가) 그것을 토대로 HandlerAdapter에서 legacy Controller를 implements 했거나 어노테이션으로 등록되어있는 등의 등록되어있는지 확인 후 handleRequest 등을 통해 실제 컨트롤러들에게 ModelAndView를 리턴받는다. 다형성으로 추상화 되어 있는 끝판왕 시스템이다.
+
+*** viewResolver는 어떤 ViewTemplate도 지원가능하게 추상화 되어있고 그것을 토대로 JSP, Thymeleaf 등 다양한 템플릿들을 지원한다.
+
+*** viewResolver는 springboot가 자동으로 suffix, prefix viewResolver(많은 뷰 리졸버 리스트 가 준비되어 있음)를 만들어 지원해준다.
+
+*** ModelToRequest도 전부 추상화 되어있어서 Model에 넣기만해도 되는것이었다. 원래는 request에 넣어야하는데 ㅜㅜ
+
+*** 다른 뷰는 실제 뷰를 렌더링하지만, JSP의 경우 forword()를 통해서 해당 JSP로 이동(실행)해야 렌더링 된다. (아마 성능적 불리가 여기서 나오는듯)
+
+
+## Spring MVC 시작하기
+
+- @RequestMapping + @Component == @Controller  (Class Level)
+    HandlerMapping 대상이 된다.
+
+- HandlerAdapter가 URL을 통해 해당 컨트롤러를 호출
