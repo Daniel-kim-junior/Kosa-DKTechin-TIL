@@ -122,3 +122,242 @@ inner(); // 10
 
 
 
+# 이벤트 전파(Event Propagation)
+
+- 자바스크립트 대부분의 이벤트는 캡쳐링 단계와 버블링 단계를 가진다.
+- 아래와 같은 HTML에서 LInk를 클릭하면 DOM은 click event를 발생시키는데,
+- 이벤트는 정확히 target element에서 발생하지 않는다.
+- 세가지의 단계를 거치는데
+
+```html
+<body>
+   <section>
+     <p>paragraph<a>Link</a></p>
+   </section>
+</body>
+```
+
+### 1. 캡쳐링 단계
+
+Link를 클릭할때, DOM 트리의 꼭대기인 Document root에서 이벤트가 발생한다. 
+
+Document root 부터 캡쳐링이 발생하면서 target element 까지 내려온다.
+
+그 때 이벤트는 target  element의 모든 부모 요소를 지나간다.
+
+### 2. Target 단계
+
+이벤트가 target에 도착하면, 이벤트가 바로 처리되는  target 단계가 시작된다. 
+
+이벤트 리스너는 이벤트 발생을 기다린다. 그리고 이벤트가 발생하자마자 콜백함수를 실행한다.
+
+```jsx
+document.querySelector("a").addEventListener("click", () => {
+  alert("Link 클릭!");
+});
+```
+
+### 3. 버블링 단계
+
+그리고 다시 이벤트가 target부터 document root로 올라가며 캡쳐링 단계처럼 모든 부모 요소를 지나간다.
+
+## 이벤트 버블링
+
+이벤트 버블링이란 버블링단계에서 상위  부모요소들을 거쳐가며 이벤트가 전파되는 현상을 말한다.
+
+다음과 nav 메뉴가 있다. .nav__menu에 랜덤한 배경색을 넣는 이벤트를 등록한다.
+
+```html
+<nav>
+  <ul class="nav__menus">
+    <li>
+      <a class="nav__menu" href="#">menu1</a>
+    </li>
+    <li>
+      <a class="nav__menu" href="#">menu2</a>
+    </li>
+    <li>
+      <a class="nav__menu" href="#">menu3</a>
+    </li>
+    <li>
+      <a>SignUp</a>
+    </li>
+  </ul>
+</nav>
+```
+
+```jsx
+const getRandom = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+const randomColor = () => {
+  return `rgb(${getRandom(0, 255)},${getRandom(0, 255)},${getRandom(0, 255)})`;
+};
+```
+
+그리고 첫번째 링크(menu1)인 ***.nav__menu*** 에 이벤트를 등록한다.
+
+```jsx
+document.querySelector(".nav__menu").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+});
+```
+
+이벤트핸들러 안에서 `this` 는 이벤트 핸들러가 연결된 요소를 가리킨다. 여기서는 ***document.querySelector(“.nav__menu”)*** 이다.
+
+다음에 상위 태그인 nav_menus에 이벤트 핸들러를 등록하면
+
+```jsx
+document.querySelector(".nav__menus").addEventListener("click", function (e) {
+        this.style.backgroundColor = randomColor();
+ });
+```
+
+![Animation.gif](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0731bc0f-8e82-49fc-b699-d00da65d90cf/Animation.gif)
+
+이런식으로 이벤트 전파가 된다.
+
+이러한 버블링 현상을 이용해 상위 태그에 이벤트 등록을 한번만 해놓으면
+
+그 하위 태그에서 그에 해당하는 이벤트가 발생했을 때 상위 태그까지 전파가 되므로 
+
+똑같은 이벤트들을 발생시킬 수 있다.
+
+## target, currentTarget
+
+event.target
+
+```jsx
+document.querySelector(".nav__menu").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log(e.target);
+});
+```
+
+위의 예시에서 각 이벤트리스너에 ***e.target*** 을 콘솔로 찍어보면 클릭한 DOM의 정보가 나온다. `target`은 이벤트가 처음 발생한 곳. 즉 클릭이 발생한 곳이기 때문이다.
+
+event.currentTarget
+
+```jsx
+document.querySelector(".nav__menu").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log(e.currentTarget);
+});
+
+이벤트핸들러에서 `currentTarget` 은 `this` 와 같아서 현재 실행중인 handler가 할당된 요소이다.
+```
+
+### **event.stopPropagation()**
+
+---
+
+`event.stopPropagation()` 으로 이벤트 전파를 막을수있다.
+
+```jsx
+document.querySelector(".nav__menu").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+  e.stopPropagation();
+});
+```
+
+
+## 이벤트 캡쳐링
+
+캡쳐링 단계에서 이벤트를 캐치하려면 ***addEventListener*** 의 세번째 파라미터를 정의할 수 있다. 
+
+기본적으로 ***default***는 ***false*** 인데, 이때 핸들러는 버블링 단계로 설정된다. 
+
+이벤트 캡쳐링은 흔히 사용 되지는 않지만 옵션을 `true` 로 설정하면 이벤트 버블링과 반대 방향으로 탐색한다.
+
+```jsx
+document.querySelector(".nav__menu").addEventListener(
+  "click",
+  function (e) {
+    this.style.backgroundColor = randomColor();
+    console.log(e.currentTarget.className);
+  },
+  true
+);
+
+document.querySelector(".nav__menus").addEventListener(
+  "click",
+  function (e) {
+    this.style.backgroundColor = randomColor();
+    console.log(e.currentTarget.className);
+  },
+  true
+);
+
+document.querySelector(".nav").addEventListener(
+  "click",
+  function (e) {
+    this.style.backgroundColor = randomColor();
+    console.log(e.currentTarget.className);
+  },
+  true
+);
+```
+
+콘솔로 찍으면 nav → .nav__menus → .nav__menu 순으로 콘솔이 찍힌다.
+
+### **이벤트 위임(Event Delegation)**
+
+---
+
+이벤트 위임이란 하위 요소마다 이벤트를 붙이지 않고 상위 요소에서 하위 요소의 이벤트들을 제어하는 방식을 말한다.
+
+예를들어 위의 *nav* 예시에서, 메뉴를 눌렀을때 메뉴에 맞는 섹션으로 이동하는 스크롤 기능을 추가한다고 하자.
+
+```html
+<nav class="nav">
+  <ul class="nav__menus">
+    <li class="nav__item">
+      <a class="nav__menu" href="#menu1">menu1</a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__menu" href="#menu2">menu2</a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__menu" href="#menu3">menu3</a>
+    </li>
+    <li class="nav__item">
+      <a>SignUp</a>
+    </li>
+  </ul>
+</nav>
+
+<section id="menu1">...</section>
+<section id="menu2">...</section>
+<section id="menu3">...</section>
+```
+
+```jsx
+document.querySelectorAll(".nav__menu").forEach(function (el) {
+  el.addEventListener("click", function (e) {
+    e.preventDefault();
+    const id = this.getAttribute("href");
+    document.querySelector(id).scrollIntoView({
+      behavior: "smooth",
+    });
+  });
+});
+```
+
+이런식으로 forEach를 써서 처리해야하는데 
+
+문제는 element마다 이벤트 핸들러를 추가하므로 여기서는 element가 세개지만 만약 리스트 아이템이 많아진다면 비효율적이다. 이 번거로운 작업을 해결할 수 있는 방법이 바로 이벤트 위임이다.
+
+먼저 **공통의 부모요소에 이벤트리스너를 추가**
+하고 이벤트리스너 안에서 어떤 요소가 이벤트를 발생시켰는지 확인한다.
+
+```
+document.querySelector(".nav__menus").addEventListener("click", function (e) {
+  e.preventDefault();
+  console.log(e.target);
+  const id = e.target.getAttribute("href");
+  document.querySelector(id).scrollIntoView({
+    behavior: "smooth",
+  });
+});
+```
