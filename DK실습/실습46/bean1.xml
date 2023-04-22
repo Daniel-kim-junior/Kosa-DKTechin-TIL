@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- How to set properties using XML namespace -->
+  <bean class="exam2.Homework" id="h1">
+    <constructor-arg value="국어"/>
+  </bean>
+  <bean class="exam2.Homework" id="h2">
+    <constructor-arg value="영어" />
+  </bean>
+  <bean class="exam2.Homework" id="h3">
+    <constructor-arg value="수학"/>
+  </bean>
+
+
+  <bean class="exam2.Student" id="st1">
+    <property name="name" value="둘리"/>
+    <property name="homework" ref="h1"/>
+  </bean>
+  <bean class="exam2.Student" id="st2">
+    <property name="name" value="또치"/>
+    <property name="homework" ref="h2"/>
+  </bean>
+  <bean class="exam2.Student" id="st3">
+    <property name="name" value="도우너"/>
+    <property name="homework" ref="h3"/>
+  </bean>
+
+</beans>
