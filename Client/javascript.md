@@ -361,3 +361,455 @@ document.querySelector(".nav__menus").addEventListener("click", function (e) {
   });
 });
 ```
+
+# 실행 컨텍스트 (execution context)
+
+소스코드(ECMAScript code)를 4가지 타입으로 구분한다.
+
+4가지 타입의 소스코드는 실행 컨텍스트를 생성한다.
+
+1. 전역 코드
+2. 함수 코드
+3. eval 코드
+4. 모듈 코드
+
+전역 코드
+
+전역에 존재하는 소스코드를 말한다. 전역에 정의된 함수, 클래스 등의 내부 코드는 포함되지 않는다.
+
+전역 코드는 전역 변수를 관리하기 위해 최상위 스코프인 전역 스코프를 생성해야 한다.
+
+var 키워드로 선언된 전역 변수와 함수 선언문으로 정의된 전역 함수를
+
+ 전역 객체의 프로퍼티와 메서드로 바인딩하고 참조하기 위해 전역 객체와 연결되어야 한다.
+
+브라우저에서는(window) node(global)
+
+이를 위해 전역 코드가 평가되면 
+
+전역 실행 컨텍스트가 생성된다.
+
+**함수 코드**
+
+함수 내부에 존재하는 소스코드를 말한다. 
+
+함수 내부에 중첩된 함수, 클래스 등의 내부 코드는 포함되지 않는다.
+
+**Eval 코드**
+
+빌트인 전역 함수인 eval 함수에 인수로 전달되어 실행되는 소스코드를 말한다. 
+
+strict mode에서 자신만의 독자적인 스코프를 생성하며
+
+이를 위해 eval 코드가 평가되면 
+
+eval 실행 컨텍스트가 생성된다.
+
+**모듈 코드**
+
+모듈 내부에 존재하는 소스코드를 말한다. 모듈 내부의 함수, 클래스 등의 내부 코드는 포함되지 않는다.
+
+모듈 코드는 독자적 스코프를 생성
+
+**소스코드의 평가와 실행**
+
+모든 소스코드는 실행에 앞서 평가 과정을 거치며 코드를 실행하기 위한 준비를 한다.
+
+평가 과정에서 실행 컨텍스트를 생성
+
+변수, 함수 등의 선언문만 먼저 실행하여 실행된 변수나 함수 식별자를 키로 
+
+실행 컨텍스트가 관리하는 스코프(렉시컬 환경의 환경 레코드)에 등록
+
+소스코드 평가 과정이 끝나면 선언문을 제외한 소스코드가 순차적으로 실행되기 시작한다.
+
+런타임이 시작되면 변수나 함수의 참조를 실행하고 실행 컨텍스트가 관리하는 스코프에서 검색해서 취득한다.
+
+변수 값의 변경 등 소스코드의 실행 결과는 다시 실행 컨텍스트가 관리하는 스코프에 등록한다.
+
+```jsx
+var x;
+x = 1;
+```
+
+다음 코드는 2가지 과정으로 나누어 처리
+
+1. 소스코드 평가 과정에서 변수 선언문 var  x 를 먼저 실행
+
+  2. 실행 컨텍스트가 관리하는 스코프에 등록되고     undefined로 초기화
+
+소스코드 실행 과정 돌입
+
+변수 선언문 var x;는 소스 평가 과정에서 이미 실행이 완료
+
+소스코드 실행 과정에서는 변수 할당문 x = 1; 만 실행
+
+이때 x 변수에 값을 할당하려면 먼저 x 변수가 선언된 변수인지 확인해야 한다.
+
+이를 위해 실행 컨텍스트가 관리하는 스코프에 x 변수가 등록되어 있는 지 확인한다.
+
+x 변수가 선언된 변수인지 확인한다. 만약 x변수가 실행 컨텍스트가 관리하는 스코프에 등록되어 있다면 x 변수는 선언된 변수, 즉 소스코드 평가 과정에서 선언문이 실행되어 등록된 변수다.
+
+x 변수는 선언된 변수라면 값을 할당하고 할당 결과를 실행 컨텍스트에 등록하여 관리한다.
+
+```jsx
+// 전역 변수 선언
+const x = 1;
+const y = 2;
+
+// 함수 정의
+function foo(a) {
+// 지역 변수 선언
+  
+
+// 130 // 103
+  console.log(x + y + a);
+}
+
+// 함수 호출
+foo(100);
+
+// 메서드 호출
+
+console.log(x + y); // 3
+
+```
+
+**전역 코드 평가** - 실행하기에 앞서 전역 코드 평가 과정을 거친다 소스 평가 과정에서는 선언문만 먼저 실행 한다. 결과적으로 전역변수와 전역 함수가 실행 컨텍스트가 관리하는 전역 스코프에 등록 된다. 
+이 때 var 키워드로 선언된 전역 변수와 함수 선언문으로 정의된 전역 함수는 전역 객체의 프로퍼티와 메서드가 된다.
+
+**전역 코드 실행** - 전역 코드 평가 과정이 끝나면 런타임이 시작되어 전역 코드가 순차적으로 실행 이 때 전역 변수에 값이 할당되고 함수가 호출된다. 함수가 호출되면 순차적으로 실행되던 전역 코드의 실행을 일시 중단하고 코드 실행 순서를 변경하여 함수 내부로 진입한다.
+
+**함수 코드 평가** - 함수 호출에 의해 코드 실행 순서가 변경되어 함수 내부로 진입하면 함수 내부의 문들을 실행하기에 앞서 함수 코드 평가 과정을 거치며 함수 코드를 실행하기 위한 준비를 한다. 이 때 매개변수와 지역 변수 선언문이 먼저 실행 되고, 그 결과 생성된 매개변수와 지역 변수가 실행 컨텍스트가 관리하는 지역 스코프에 등록된다. 또한 함수 내부에서 지역 변수처럼 사용할 수 있는 arguments 객체가 생성되어 지역 스코프에 등록되고 this 바인딩도 결정된다.
+
+## 함수 코드 실행
+
+1. console.log 메서드를 호출 하기 위해 먼저 식별자인 console을 스코프 체인을 통해 검색한다.
+2. 이를 위해 함수 코드의 지역 스코프는 상위 스코프인 전역 스코프와 연결 되어야 한다.
+3. console 식별자는 스코프 체인에 등록되어 있지 않고 전역 객체에 프로퍼티로 존재한다.
+4. 전역 객체의 프로퍼티가 전역 변수처럼 전역 스코프를 통해 검색 가능해야 한다.
+5. log 프로퍼티를 console 객체의 프로토타입 체인을 통해 검색한다.
+6. console.log 메서드에 인수 표현식 a + x + y 가 평가 된다.
+7. a, x , y 식별자는 스코프 체인을 통해 검색한다.
+8. console.log 메서드의 실행이 종료되면 함수 코드 실행 과정이 종료된다.
+9. 전역 코드 실행을 계속 한다.
+
+이처럼 코드가 실행되려면 스코프를 구분하여 식별자와 바인딩 된 값이 관리되어야 한다.
+
+그리고 중첩 관계에 의해 스코프 체인을 형성하여 식별자를 검색할 수 있어야 하고,
+
+전역 객체의 프로퍼티도 전역 변수처럼 검색 할 수 있어야 하는데
+
+이를 관리하는 것이 실행 컨텍스트이다.
+
+식별자와 스코프는 실행 컨텍스트의 렉시컬 환경으로 관리하고 
+
+코드 실행 순서는 실행 컨텍스트 스택으로 관리한다.
+
+## 실행 컨텍스트 스택(콜 스택)
+
+```jsx
+const x = 1;
+
+function foo() {
+    const y = 2;
+  function bar () {
+        const z = 3;
+    console.log(x + y + z);
+  }
+  bar();
+}
+
+foo();
+
+```
+
+### 코드의 제어권 이관
+
+전역 실행 컨텍스트 → foo 함수 실행 컨텍스트 → bar함수 실행 컨텍스트
+
+← bar 함수 실행 컨텍스트 ← foo 함수 실행 컨텍스트 ← 전역 실행 컨텍스트 
+
+실행 컨텍스트 스택 → 실행 순서
+
+렉시컬 환경 → 스코프와 식별자를 관리
+
+```jsx
+const x = 1;
+
+function foo () {
+    const x = 2;
+  const y = 4;
+    function bar() {
+    const y = 2;
+
+      return x + y;
+    }
+}
+
+bar();
+
+정적 스코프 (렉시컬환경)
+console.log(foo());
+
+Global Lexical Environment
+x         1
+foo      <function object>
+
+         | 스코프 체인
+foo Lexical Environment
+x         4
+y         2
+```
+
+렉시컬 환경은 키와 값을 갖는 객체 형태의 스코프(전역, 함수, 블록 스코프)를 생성하여
+
+식별자를 키로 등록하고 식별자에 바인딩된 값을 관리한다.
+
+즉 렉시컬 환경은 스코프를 구분하여 식별자를 등록하고 관리하는 저장소 역할을 한다.
+
+실행 컨텍스트에는
+
+LexicalEnvironment와  VariableEnvironment 가 공존하는데
+
+생성 초기에는 하나의 동일한 렉시컬 환경을 참조한다.
+
+이후 몇가지 상황을 만나게 되면 VariableEnvironment가 새로운 렉시컬 환경을 생성하고,
+
+두개의 참조값이 달라지는 경우도 있다.
+
+(Strict mode, eval 코드, try/Catch)
+
+렉시컬 환경은 두개의 컴포넌트로 구성된다.
+
+1. 환경 레코드
+
+스코프에 포함된 식별자를 등록하고 등록된 식별자에 바인딩 된 값을 관리하는 저장소
+
+  2. 외부 렉시컬 환경에 대한 참조
+
+상위 스코프로 연결된 단방향 링크드 리스트 스코프 체인
+
+# 화살표 함수와 일반함수의 가장 큰 차이
+
+자바스크립트의 경우 함수 호출 방식에 의해 [this](https://poiemaweb.com/js-this)에 바인딩할 어떤 객체가 동적으로 결정된다. 
+
+다시 말해, 함수를 선언할 때 this에 바인딩할 객체가 정적으로 결정되는 것이 아니고, 
+
+**함수를 호출할 때 함수가 어떻게 호출되었는지에 따라** this에 바인딩할 객체가 동적으로 결정된다.
+
+콜백 함수 내부의 this는 전역 객체 window를 가리킨다.
+
+```jsx
+var a = 10;
+
+function Prefixer(prefix) {
+    var a = 20;
+  this.prefix = prefix;
+    
+}
+
+Prefixer.prototype.prefixArray = function (arr) {
+  // (A)
+  return arr.map(function (x) {
+    return this.prefix + ' ' + x; // (B)
+  });
+};
+
+let pre = new Prefixer('Hi');
+console.log(pre.prefixArray(['Lee', 'Kim']));
+```
+
+(A) 지점에서의 this는 생성자 함수 Prefixer가 생성한 객체, 즉 생성자 함수의 인스턴스(위 예제의 경우 pre)이다.
+
+(B) 지점에서 사용한 this는 아마도 생성자 함수 Prefixer가 생성한 객체(위 예제의 경우 pre)일 것으로 기대하였겠지만, 이곳에서 this는 전역 객체 window를 가리킨다. 이는 생성자 함수와 객체의 메소드를 제외한 모든 함수(내부 함수, 콜백 함수 포함) 내부의 this는 전역 객체를 가리키기 때문이다.
+
+콜백 함수 내부의 this가 메소드를 호출한 객체(생성자 함수의 인스턴스)를 가리키게 하려면 아래의 3가지 방법이 있다.
+
+```jsx
+// Solution 1: that = this
+function Prefixer(prefix) {
+  this.prefix = prefix;
+}
+
+Prefixer.prototype.prefixArray = function (arr) {
+  let that = this;  // this: Prefixer 생성자 함수의 인스턴스
+  return arr.map(function (x) {
+    return that.prefix + ' ' + x;
+  });
+};
+
+let pre = new Prefixer('Hi');
+console.log(pre.prefixArray(['Lee', 'Kim']));
+```
+
+```jsx
+// Solution 2: map(func, this)
+function Prefixer(prefix) {
+  this.prefix = prefix;
+}
+
+Prefixer.prototype.prefixArray = function (arr) {
+  return arr.map(function (x) {
+    return this.prefix + ' ' + x;
+  }, this); // this: Prefixer 생성자 함수의 인스턴스
+};
+
+var pre = new Prefixer('Hi');
+console.log(pre.prefixArray(['Lee', 'Kim']));
+```
+
+ES5에 추가된 [Function.prototype.bind()](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)로 this를 바인딩
+
+```jsx
+// Solution 3: bind(this)
+function Prefixer(prefix) {
+  this.prefix = prefix;
+}
+
+Prefixer.prototype.prefixArray = function (arr) {
+  return arr.map(function (x) {
+    return this.prefix + ' ' + x;
+  }.bind(this)); // this: Prefixer 생성자 함수의 인스턴스
+};
+
+var pre = new Prefixer('Hi');
+console.log(pre.prefixArray(['Lee', 'Kim']));
+```
+
+## 화살표 함수의 this
+
+일반 함수는 함수를 선언할 때 this에 바인딩할 객체가 정적으로 결정되는 것이 아니고, 함수를 호출할 때 함수가 어떻게 호출되었는지에 따라 this에 바인딩할 객체가 동적으로 결정된다고 하였다.
+
+화살표 함수는 함수를 선언할 때 this에 바인딩할 객체가 정적으로 결정된다. 동적으로 결정되는 일반 함수와는 달리 **화살표 함수의 this 언제나 상위 스코프의 this를 가리킨다.** 이를 **Lexical this**라 한다. 
+
+화살표 함수의 this 바인딩 객체 결정 방식은 함수의 상위 스코프를 결정하는 방식인 [렉시컬 스코프](https://poiemaweb.com/js-scope#7-%EB%A0%89%EC%8B%9C%EC%BB%AC-%EC%8A%A4%EC%BD%94%ED%94%84)
+와 유사하다.(선언적으로 결정)
+
+```jsx
+function Prefixer(prefix) {
+  t*his.prefix* = prefix;
+}
+
+Prefixer.prototype.prefixArray = function (arr) {
+  // this는 상위 스코프인 prefixArray 메소드 내의 this를 가리킨다.
+  return arr.map(x => `${this.prefix}  ${x}`);
+};
+
+const pre = new Prefixer('Hi');
+console.log(pre.prefixArray(['Lee', 'Kim']));
+```
+
+화살표 함수는 call, apply, bind 메소드를 사용하여 this를 변경할 수 없다.
+
+```
+window.x = 1;
+const normal = function () { return this.x; };
+const arrow = () => this.x;
+
+console.log(normal.call({ x: 10 })); // 10
+console.log(arrow.call({ x: 10 }));  // 1
+```
+
+## 화살표 함수를 사용해서는 안되는 경우
+
+## **메소드**
+
+화살표 함수로 메소드를 정의하는 것은 피해야 한다. 화살표 함수로 메소드를 정의하여 보자.
+
+```
+// Bad
+const person = {
+  name: 'Lee',
+  sayHi: () => console.log(`Hi ${this.name}`)
+};
+
+person.sayHi(); // Hi undefined
+```
+
+위 예제의 경우, 메소드로 정의한 화살표 함수 내부의 this는 메소드를 소유한 객체, 즉 메소드를 호출한 객체를 가리키지 않고 상위 컨텍스트인 전역 객체 window를 가리킨다. 따라서 화살표 함수로 메소드를 정의하는 것은 바람직하지 않다.
+
+```jsx
+/ Good
+const person = {
+  name: 'Lee',
+  sayHi() { // === sayHi: function() {
+    console.log(`Hi ${this.name}`);
+  }
+};
+
+person.sayHi(); // Hi Lee
+```
+
+메소드 축약 표현을 사용하도록 하자
+
+## ****prototype****
+
+화살표 함수로 정의된 메소드를 prototype에 할당하는 경우
+
+```
+// Bad
+const person = {
+  name: 'Lee',
+};
+
+Object.prototype.sayHi = () => console.log(`Hi ${this.name}`);
+
+person.sayHi(); // Hi undefined
+
+```
+
+화살표 함수로 객체의 메소드를 정의하였을 때와 같은 문제가 발생한다. 따라서 prototype에 메소드를 할당하는 경우, 일반 함수를 할당한다.
+
+```jsx
+// Good
+const person = {
+name: 'Lee',
+};
+
+Object.prototype.sayHi = function() {
+console.log(`Hi ${this.name}`);
+};
+
+person.sayHi(); // Hi Lee
+```
+
+## **생성자 함수**
+
+화살표 함수는 생성자 함수로 사용할 수 없다. 생성자 함수는 prototype 프로퍼티를 가지며 prototype 프로퍼티가 가리키는 프로토타입 객체의 constructor를 사용한다. 하지만 화살표 함수는 prototype 프로퍼티를 가지고 있지 않다.
+
+```
+const Foo = () => {};
+
+// 화살표 함수는 prototype 프로퍼티가 없다
+console.log(Foo.hasOwnProperty('prototype')); // false
+
+const foo = new Foo(); // TypeError: Foo is not a constructor
+```
+
+## **4.4 addEventListener 함수의 콜백 함수**
+
+addEventListener 함수의 콜백 함수를 화살표 함수로 정의하면 this가 상위 컨택스트인 전역 객체 window를 가리킨다.
+
+```
+// Bad
+var button = document.getElementById('myButton');
+
+button.addEventListener('click', () => {
+  console.log(this === window); // => true
+  this.innerHTML = 'Clicked button';
+});
+
+```
+
+따라서 addEventListener 함수의 콜백 함수 내에서 this를 사용하는 경우, function 키워드로 정의한 일반 함수를 사용하여야 한다. 일반 함수로 정의된 addEventListener 함수의 콜백 함수 내부의 [this](https://poiemaweb.com/js-event#43-dom-level-2-event-listener)는 이벤트 리스너에 바인딩된 요소(currentTarget)를 가리킨다.
+
+```
+// Good
+var button = document.getElementById('myButton');
+
+button.addEventListener('click', function() {
+  console.log(this === button); // => true
+  this.innerHTML = 'Clicked button';
+});
+```
