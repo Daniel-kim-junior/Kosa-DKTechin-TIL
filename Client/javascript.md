@@ -813,3 +813,194 @@ button.addEventListener('click', function() {
   this.innerHTML = 'Clicked button';
 });
 ```
+
+# 리액트 훅으로 배우는 클로저
+
+## 클로저란
+
+클로저는 함수와 함수가 선언된 렉시컬 환경의 조합
+
+```jsx
+const outer = () => {
+  const outerVariable = 'outer!'; // 1. outer 함수 안에 지역변수 outerVariable 선언
+
+  const inner = () => {
+    console.log(outerVariable); // 2. 바깥의 outerVariable을 참조해 console.log 출력
+  };
+
+  return inner; // 3. 바깥의 outerVariable을 참조해 console.log를 출력하는 함수를 반환
+};
+
+const fano = outer(); // 4. outer함수 호출 -> 변수 fano에 inner함수의 주소값이 저장됨
+
+fano(); // 5. 'outer!'
+```
+
+클로저는 어떤 함수(outer) 내부에 선언된 함수(inner)가 바깥 함수(outer)의 지역 변수(outerVariable)를 참조하는 것이 함수(outer)가 종료된 이후에도 계속 유지되는 현상을 말한다.
+
+앞서 자바스크립트는 스코프 체인을 통해 변수를 참조한다고 했다.
+
+함수 inner 는 스코프 체인을 통해 outer의 outerVariable을 선언적으로 렉시컬 환경을 기억해서 참조하게 되고
+
+이것은 평가과정에서 이루어지기 때문에 실제로 outer함수가 호출되었을 때 outer함수가 return 되더라도
+
+가비지 컬렉션의 특성상 참조하는 변수가 하나라도 있으면 그 값은 수집 대상에서 제외시키기 때문에 ( 호출될 가능성이 있기 때문)
+
+프로그램이 종료될 때까지 메모리에 남아있게 된다.
+
+클로저를 남발하면 메모리 leak 을 유발시키는 원인이기도 하다
+
+리액트 훅을 보면 클로저를 통해 구현되었다는 것을 알 수 있는데
+
+```jsx
+const Counter = () => {
+  const [value, setValue] = useState(0); // 이 hook함수가 클로져를 통해 구현되었습니다.
+
+  return (
+    <div>
+      <p>{value}</p>
+      <button onClick={() => setValue(value + 1)}>+</button>
+      <button onClick={() => setValue(value - 1)}>-</button>
+    </div>
+  );
+};
+```
+
+counter가 return 되어도 익명함수를 통해 value에 접근하여 value의 값을 바꿀 수 있다는 것을 알 수 있습니다.
+
+리액트 훅 중 useState를 구현해보겠습니다.
+
+```jsx
+// 예제 0
+function useState(initialValue) {
+  var _val = initialValue // _val은 useState에 의해 만들어진 지역 변수입니다.
+  function state() {
+    // state는 내부 함수이자 클로저입니다.
+    return _val // state()는 부모 함수에 정의된 _val을 참조합니다.
+  }
+  function setState(newVal) {
+    // 마찬가지
+    _val = newVal // _val를 노출하지 않고 _val를 변경합니다.
+  }
+  return [state, setState] // 외부에서 사용하기 위해 함수들을 노출
+}
+var [foo, setFoo] = useState(0) // 배열 구조분해 사용
+console.log(foo()) // 0 출력 - 위에서 넘긴 initialValue
+setFoo(1) // useState의 스코프 내부에 있는 _val를 변경합니다.
+console.log(foo()) // 1 출력 - 동일한 호출하지만 새로운 initialValue
+```
+
+하지만 이렇게 되면 foo가 함수가 되어버려 우리가 알고있는 react hook이 아닙니다.
+
+오래된 클로저의 버그 형태의 변수를 바로 노출 하는식으로 코드를 써본다면...
+
+```jsx
+function useState(initialValue) {
+  var _val = initialValue
+  // state() 함수 없음
+  function setState(newVal) {
+    _val = newVal
+  }
+  return [_val, setState] // _val를 그대로 노출
+}
+var [foo, setFoo] = useState(0)
+console.log(foo) // 함수 호출 할 필요 없이 0 출력
+setFoo(1) // useState의 스코프 내부에 있는 _val를 변경합니다.
+console.log(foo) // 0 출력
+
+```
+
+함수안의 함수가 변수를 참조하고 있지 않고 있기 때문에 클로저의 형태가 아닙니다.
+
+이것을 해결하기 위해
+
+```jsx
+// 예제 2
+const MyReact = (function() {
+  let _val // 모듈 스코프 안에 state를 잡아놓습니다.
+  return {
+    render(Component) {
+      const Comp = Component()
+      Comp.render()
+      return Comp
+    },
+    useState(initialValue) {
+      _val = _val || initialValue // 매 실행마다 새로 할당됩니다.
+      function setState(newVal) {
+        _val = newVal
+      }
+      return [_val, setState]
+    },
+  }
+})()
+```
+
+return 안에 함수를 넣은 모듈패턴으로 클로저를 구현하면
+
+정상적으로 값이 출력됩니다.
+
+더 나아가 useEffect를 클로저로 구현한 코드입니다.
+
+```jsx
+// Example 3
+const MyReact = (function() {
+  let _val, _deps // 스코프 안에서 상태와 의존성을 잡아 놓습니다.
+  return {
+    render(Component) {
+      const Comp = Component()
+      Comp.render()
+      return Comp
+    },
+    useEffect(callback, depArray) {
+      const hasNoDeps = !depArray
+            
+            // 첫실행은 무조건 deps가 undefined 무조건 한번 실행 보장(true)
+            // 배열이 없다면 평가 될 때마다 실행
+            // 배열이 있다면 hasNoDeps는 false지만 deps에는 배열이 들어갈 것이고 무조건 _deps는 true
+            // 배열의 요소를 돌면서 원래 deps[i]와 새로운 depArray 배열 요소들을 비교하며 하나라도 틀리다면
+            // trigger가 되어 hasChangedDeps true로 변환 
+      const hasChangedDeps = _deps ? !depArray.every((el, i) => el === _deps[i]) : true
+      if (hasNoDeps || hasChangedDeps) {
+        callback()
+        _deps = depArray
+      }
+    },
+    useState(initialValue) {
+      _val = _val || initialValue
+      function setState(newVal) {
+        _val = newVal
+      }
+      return [_val, setState]
+    },
+  }
+})()
+
+// 사용하는 곳
+function Counter() {
+  const [count, setCount] = MyReact.useState(0)
+  MyReact.useEffect(() => {
+    console.log('effect', count)
+  }, [count])
+  return {
+    click: () => setCount(count + 1),
+    noop: () => setCount(count),
+    render: () => console.log('render', { count }),
+  }
+}
+let App
+App = MyReact.render(Counter)
+// 이펙트 0
+// render {count: 0}
+App.click()
+App = MyReact.render(Counter)
+// 이펙트 1
+// render {count: 1}
+App.noop()
+App = MyReact.render(Counter)
+// // 이펙트가 실행되지 않음
+// render {count: 1}
+App.click()
+App = MyReact.render(Counter)
+// 이펙트 2
+// render {count: 2}
+```
