@@ -12,7 +12,7 @@ AOP (Aspect-Oriented Programming) 란 단어를 번역하면 관점(관심) 지�
 
 핵심 기능 관점에서는 공통된 요소가 없지만 공통된 부가 기능 요소가 있다면 그것을 추출해 직선이 아닌 횡단으로 크로스 커팅 하는 것
 
-[[![부가 기능 관점]("https://github.com/Daniel-kim-junior/Kosa-DKTechin-TIL/blob/main/SpringMVC/img/Spring_AOP.png")]](https://github.com/Daniel-kim-junior/Kosa-DKTechin-TIL/blob/main/SpringMVC/img/Spring_AOP.png)
+![부가 기능 관점]("https://github.com/Daniel-kim-junior/Kosa-DKTechin-TIL/blob/main/SpringMVC/img/Spring_AOP.png")
 (부가기능에서 바라본 관점)
 
 부가 기능 관점에서 바라보면 각각의 Service는 수행 시간 측정을 나타내는 before 메소드와 after 메소드가 공통되는 것을 알 수 있다.
