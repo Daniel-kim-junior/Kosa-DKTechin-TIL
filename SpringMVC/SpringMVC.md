@@ -59,7 +59,7 @@ List<String> values = map.get("keyA");
 
 ### Filter
 
-- Abstract Method 없는 Abstract Class 절대 구현해야할 로직은 없지만 상속 받아서 써
+- Abstract Method 없는 Abstract Class 절대 구현해야할 로직은 없지만 상속 받아서 쓴다
 
 - Filter란 웹 클라이언트에서 요청한 웹 자원들(Servlet 또는 JSP, 등 정적 자원들)이 수행되기 전 또는 후에 수행되는 객체로서 request 또는 response에 영향을 주거나 또는 특정 처리를 할 수 있다.
     Filter의 응용 예로 인증, 로깅, 이미지 변환, 데이터 압축, 암호화, 스트림 토큰화, XML 변환 등이 있다.
