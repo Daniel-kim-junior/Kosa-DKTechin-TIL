@@ -115,7 +115,7 @@ CORS가 동작하는 방식은 한 가지가 아니라 세 가지의 시나리�
 
 ### Preflight 플로우 차트
 
-[!preflight](https://user-images.githubusercontent.com/67178562/234728673-6fe2c852-f16c-4989-b5ce-e07484a4fc3e.png)
+![preflight](https://user-images.githubusercontent.com/67178562/234728673-6fe2c852-f16c-4989-b5ce-e07484a4fc3e.png)
 
 요청의 유효성 검사
 
