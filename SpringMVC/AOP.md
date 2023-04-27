@@ -98,6 +98,7 @@ AOP는 여기서 부터 시작한다.
 
 ### 사용법
 
+![pointcut](https://user-images.githubusercontent.com/67178562/234728532-ddb1c8c8-7f11-4bc4-9603-08c5009eeda8.png)
 
 
 @Around는 어드바이스
