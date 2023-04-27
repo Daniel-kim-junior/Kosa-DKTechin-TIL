@@ -115,7 +115,7 @@ CORS가 동작하는 방식은 한 가지가 아니라 세 가지의 시나리�
 
 ### Preflight 플로우 차트
 
-[!preflight](./img/cors-preflight.png)
+![preflight](https://user-images.githubusercontent.com/67178562/234728673-6fe2c852-f16c-4989-b5ce-e07484a4fc3e.png)
 
 요청의 유효성 검사
 
@@ -212,7 +212,7 @@ Access-Control-Allow-Origin과 같은 값을 보내주면 그때 브라우저가
 
 방식이다. 즉 프라이플라이트와 단순 요청의 시나리오는 전반적인 로직 자체는 같되, 예비 요청의 존재 여부만 다르다.
 
-[!단순요청](./img/simple-request.png)
+![Simple Request](https://user-images.githubusercontent.com/67178562/234728803-e4a56e4e-190d-4829-9492-9a3a0bfafd20.png)
 
 
 하지만 아무 때나 단순 요청을 사용할 수 있는 것은 아니고, 특정 조건을 만족하는 경우에만 예비 요청을 생략할 수 있다.

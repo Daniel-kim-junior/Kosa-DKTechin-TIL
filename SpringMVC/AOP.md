@@ -12,7 +12,7 @@ AOP (Aspect-Oriented Programming) 란 단어를 번역하면 관점(관심) 지�
 
 핵심 기능 관점에서는 공통된 요소가 없지만 공통된 부가 기능 요소가 있다면 그것을 추출해 직선이 아닌 횡단으로 크로스 커팅 하는 것
 
-[!부가 기능 관점]("./img/Spring_AOP.png")
+![부가 기능 관점](https://user-images.githubusercontent.com/67178562/234728078-f2a56dd0-af41-436b-b7c0-3ab9eaf89860.png)
 (부가기능에서 바라본 관점)
 
 부가 기능 관점에서 바라보면 각각의 Service는 수행 시간 측정을 나타내는 before 메소드와 after 메소드가 공통되는 것을 알 수 있다.
@@ -76,7 +76,7 @@ AOP는 여기서 부터 시작한다.
    타겟을 감싸서 타겟의 요청을 대신 받아주는 랩핑(Wrapping) 오브젝트.
    호출자 (클라이언트)에서 타겟을 호출하게 되면 타겟이 아닌 타겟을 감싸고 있는 프록시가 호출되어, 타겟 메소드 실행전에 선처리, 타겟 메소드 실행 후, 후처리를 실행시키도록 구성되어 있다.
 
-[!proxy]("./img/proxy.png")
+![proxy](https://user-images.githubusercontent.com/67178562/234728458-9bb2db2c-1057-4674-8d26-bb8007b6cd4b.png)
 
 (AOP에서 프록시는 호출을 가로챈 후, 어드바이스에 등록된 기능을 수행 후 타겟 메소드를 호출.)
 
@@ -98,7 +98,8 @@ AOP는 여기서 부터 시작한다.
 
 ### 사용법
 
-[!pointcut]("./img/pointcut.png")
+![pointcut](https://user-images.githubusercontent.com/67178562/234728532-ddb1c8c8-7f11-4bc4-9603-08c5009eeda8.png)
+
 
 @Around는 어드바이스
 
