@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+</head>
+<body>
+<h1>우리팀 소개</h1>
+<hr>
+  <div id="button-container">
+    <button id="team-name">우리 팀명</button>
+    <button id="team-person">우리 팀원</button>
+  </div>
+  <div id="result">
+  </div>
+  </body>
+<script>
+  const buttons = document.getElementById("button-container");
+  const result = document.getElementById("result");
+  buttons.addEventListener('click', handleEvent)
+
+  async function handleEvent(e) {
+    let rst;
+    if(e.target.id === "team-name") {
+      rst = await fetch("http://localhost:8088/teamName");
+      const dom = await rst.json();
+      result.innerHTML = `<div>우리 팀의 팀명은 ${dom.teamName} 입니다`;
+    } else if(e.target.id === "team-person") {
+      rst = await fetch("http://localhost:8088/teamPerson");
+      const dom = await rst.json();
+      let str = '<ul>'
+      dom.teamMember.forEach(e =>
+        str += `<li>별명은 ${e.nicName}이고 좋아하는 음식은 ${e.food}입니다</li>`
+      )
+      str += '</ul>'
+      result.innerHTML = str;
+    }
+  }
+</script>
+</html>

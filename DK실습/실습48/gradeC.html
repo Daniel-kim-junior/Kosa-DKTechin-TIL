@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  <style>
+
+</style>
+</head>
+<body>
+<h1>[[${ name }]]님은 C등급입니다. 우수한 성적이네요(^^)</h1>
+<hr>
+<a th:href='${ #request.getHeader("referer") }'>성적 입력 화면으로</a>
+</body>
+</html>

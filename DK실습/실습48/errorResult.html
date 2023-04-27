@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+</head>
+<body>
+<h1>요청을 처리하는 동안 오류가 발생했어요..</h1>
+<hr>
+오류의 원인 : <span>[[${result}]]</span>
+<div>
+  <a th:href='${ #request.getHeader("referer") }'>입력화면</a>
+</div>
+</body>
+</html>

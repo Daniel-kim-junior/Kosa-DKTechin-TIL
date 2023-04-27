@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Home</title>
+</head>
+<body>
+<h1>로또 결과</h1>
+<div th:utext="${LottoDTO.result}"></div>
+<img th:src="${LottoDTO.imgName}" />
+<hr>
+<th:block th:if='${LottoDTO.imgName == "images/rain.png"}'>
+  <a th:href='${ #request.getHeader("referer")}'>재시도....</a>
+</th:block>
+</body>
+</html>
