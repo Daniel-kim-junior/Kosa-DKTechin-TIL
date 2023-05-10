@@ -57,3 +57,16 @@ log.trace ...는 로그에 찍히지 않는다.
 - 콘솔 출력 뿐만 아니라, 파일이나 네트워크 등, 로그를 별도의 위치에 남길 수 있다. 특히 파일로 남길 때는 일별, 특정 용량에 따라
   로그를 분할하는 것도 가능하다.
 - 성능도 일반 System.out보다 좋다(내부 버퍼링, 멀티 쓰레드 등등) 실무에서는 그래서 로그를 꼭 사용해야 한다.
+
+### SLF4J 로그 인터페이스 구현체들
+
+- Logback, Log4J2
+
+Log4J의 보안 취약점으로 인해 현재 보완된 Log4J2 혹은 Logback을 주로 사용
+
+
+### 패키지 별로 로깅 레벨 지정
+
+- 다음 방법으로 상위 패키지의 디폴트 레벨을 설정하고, 하위 패키지들에 대한 각각의 로깅 레벨을 별도로 설정할 수 있다.
+logging.level.org.springframework.web=info
+logging.level.com.example.springedu=debug
