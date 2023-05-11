@@ -64,9 +64,19 @@ log.trace ...는 로그에 찍히지 않는다.
 
 Log4J의 보안 취약점으로 인해 현재 보완된 Log4J2 혹은 Logback을 주로 사용
 
-
 ### 패키지 별로 로깅 레벨 지정
 
 - 다음 방법으로 상위 패키지의 디폴트 레벨을 설정하고, 하위 패키지들에 대한 각각의 로깅 레벨을 별도로 설정할 수 있다.
-logging.level.org.springframework.web=info
-logging.level.com.example.springedu=debug
+  logging.level.org.springframework.web=info
+  logging.level.com.example.springedu=debug
+
+### log 작성시 유의사항
+
+```
+<root level="INFO">
+    <appender-ref ref="STDOUT" />
+</root>
+```
+
+root level은 무조건 작성해줘야한다.
+additivity는 root 레벨을 마지막에 적용할지, 하지 않을지 default 'true'
