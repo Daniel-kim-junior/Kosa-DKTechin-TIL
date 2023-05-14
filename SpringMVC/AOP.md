@@ -75,7 +75,9 @@ AOP는 여기서 부터 시작한다.
 6. 프록시 (Proxy)
    타겟을 감싸서 타겟의 요청을 대신 받아주는 랩핑(Wrapping) 오브젝트.
    호출자 (클라이언트)에서 타겟을 호출하게 되면 타겟이 아닌 타겟을 감싸고 있는 프록시가 호출되어, 타겟 메소드 실행전에 선처리, 타겟 메소드 실행 후, 후처리를 실행시키도록 구성되어 있다.
-
+   클래스에 부가 기능을 추가하고 싶을 때 대리자(Proxy)를 만들어서 클래스를 건드리지 않고도 기능을 추가할 수
+   있는 디자인 패턴
+   
 ![proxy](https://user-images.githubusercontent.com/67178562/234728458-9bb2db2c-1057-4674-8d26-bb8007b6cd4b.png)
 
 (AOP에서 프록시는 호출을 가로챈 후, 어드바이스에 등록된 기능을 수행 후 타겟 메소드를 호출.)
@@ -175,3 +177,22 @@ this와 유사하지만 빈 타입이 아닌 타입의 인스턴스인 경우
 ex) @annotation(org.springframework.transaction.annotation.Transactional) : Transactional 어노테이션이 지정된 메소드 전부
 
 다양한 지정자가 등장하였지만 실제로 execution과 @annotation을 주로 사용하는 것으로 알고 있다.
+
+스프링은 프록시 패턴과 LTW를 지원한다.
+
+인터페이스가 존재 : JDK Dynamic Proxy
+인터페이스가 존재하지 않음 : CGLib
+
+스프링은 AspectJ가 제공하는 어노테이션, 관련 인터페이스만 사용하고(문법 차용)
+AspectJ가 제공하는 컴파일, 로드타임 위버 등은 사용하지 않는다.
+
+조인 포인트 - 스프링에서는 메소드 호출 시점
+포인트컷 - 어드바이스를 적용할 여러 조인 포인트 중 조건을 선택하는 개념
+타겟 - 포인트 컷에 해당하는 객체
+
+@AfterThorwing : 예외가 발생했을 때 수행하는 로직 (예외를 대신 처리해주지는 않는다)
+@AfterReturning : 정상 리턴 되었을 때 수행하는 로직
+
+@Around -> @Before -> @AfterReturning, @AfterThrowing -> @After
+
+
