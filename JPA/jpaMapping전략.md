@@ -71,3 +71,7 @@ private Meeting refid;
 - null을 줄 수도 있음
 "select m from Member m where m.team = null"
 
+
+---
+### Spring Data JPA
+
