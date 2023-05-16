@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lab1">
+  <select id="exam1"  resultType="BookDTO">
+    select * from book
+  </select>
+  <select id="exam2"  resultType="BookDTO">
+    select * from book order by price desc
+  </select>
+  <select id="exam3"  resultType="BookDTO">
+    select * from book where price > 20000
+  </select>
+  <select id="exam4"  resultType="BookDTO">
+    select * from book where book_type = "b02"
+  </select>
+  <select id="exam5"  resultType="BookDTO">
+    select * from book where book_type = "b04" or book_type = "b05"
+  </select>
+  <select id="exam6" parameterType="String"  resultType="BookDTO">
+    select * from book where book_name like '%${value}%'
+  </select>
+  <select id="exam7"  resultType="BookDTO">
+    select book_type, avg(price) as price from book group by book_type;
+  </select>
+  <insert id="insert" parameterType="BookDTO">
+    insert into book values (#{bookType}, #{bookName}, #{price})
+  </insert>
+</mapper>

@@ -29,3 +29,9 @@ API 문서의 메서드 설명 끝에서 종종 "Implementation Requirements"로
 
 java.util.AbstractList의 removeRange 메서드를 예로 살펴보자
 
+> protected void removeRange(int fromIndex, int toIndex)
+> fromIndex(포함)부터 toIndex(미포함)까지의 모든 원소를 이 리스트에서 제거한다.
+> toIndex 이후의 원소들은 앞으로 (index만큼씩) 당겨진다. 이 호출로 리스트는 'toIndex - fromIndex'만큼 짧아진다.(toIndex == fromIndex라면 아무런 효과가 없다.)
+이 리스트 혹은 이 리스트의 부분리스트에 정의된 clear 연산이 이 메서드를 호출한다.
+리스트 구현의 내부 구조를 활용하도록 이 메서드를 재정의하면 이 리스트와 부분리스트의 clear 연산 성능을 크게 개선할 수 있다.
+
