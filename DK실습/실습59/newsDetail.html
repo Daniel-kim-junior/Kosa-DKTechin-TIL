@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>뉴스게시판</h1>
+<main>
+  <h1>뉴스 내용</h1>
+  <div id="form-wrapper" style="width:300px">
+    <form method="post" th:Object="${news}" th:action="@{/update}" style="display: flex; flex-direction: column">
+      <input style="display: none" th:field="*{id}">
+      <input id="writer" th:field="*{writer}" >
+      <input id="title" th:field="*{title}" >
+      <input id="contents" th:field="*{content}" style="height: 300px" >
+      <button type="button" th:onclick="|location.href='@{/newsmain}'|">확인</button>
+      <button type="submit">수정</button>
+      <button type="button" th:onclick="|location.href='@{/delete(newsId=${news.id})}'|">삭제</button>
+    </form>
+  </div>
+</main>
+<script>
+
+</script>
+</body>
+</html>

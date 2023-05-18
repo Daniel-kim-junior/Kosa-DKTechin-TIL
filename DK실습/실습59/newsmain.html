@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<style>
+  table {
+    width: 100%;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #444444;
+
+  }
+</style>
+<body>
+    <main>
+      <h1>뉴스게시판</h1>
+      <table id="wrapper-container">
+        <thead>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>작성일</th>
+          <th>조회수</th>
+        </thead>
+        <tbody th:each="news : ${newsList}">
+          <tr id="row-wrapper" >
+            <td th:onclick="|location.href='@{/listOne(newsId=${news.id})}'|" th:text="${news.id}" style="cursor: pointer;"></td>
+            <td th:text="${news.title}"></td>
+            <td th:onclick="|location.href='@{/writer(newsWriter=${news.writer})}'|" th:text="${news.writer}" style="cursor: pointer;"></td>
+            <td th:text="${news.writeDate}"></td>
+            <td th:text="${news.cnt}"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="page-wrapper">
+        <div th:if="${count != 0}" style="display: flex; justify-content: center">
+          <div th:each="page : ${#numbers.sequence(1, count + 1)}" style="text-align: center; padding: 20px">
+            <a th:text="${page}" th:thisPage="${page}" th:onclick="pageNews(this.getAttribute('thisPage'))" style="cursor: pointer;"></a>
+          </div>
+        </div>
+      </div>
+      <input type="text" th:value="${inputContent}">
+      <button onclick="searchNews()">뉴스 검색</button>
+      <button onclick="formEvent()">뉴스 작성</button>
+      <div id="form-wrapper" style="display: none; width: 300px">
+        <form method="post" th:Object="${news}" th:action="@{/insert}" style="display: flex; flex-direction: column">
+          <input id="writer" th:field="*{writer}" placeholder="작성자명을 입력해주세요.">
+          <input id="title" th:field="*{title}" placeholder="제목을 입력해주세요.">
+          <input id="contents" th:field="*{content}" placeholder="내용을 입력해주세요." style="height: 300px">
+          <button type="submit">저장</button>
+          <button type="button" onclick="reWrite()">재작성</button>
+          <button type="button" onclick="formEvent()">취소</button>
+        </form>
+      </div>
+    </main>
+<script>
+document.addEventListener('keydown', function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+  };
+}, true);
+  function pageNews(page) {
+    const urlStr = window.location.href;
+    const url = new URL(urlStr);
+    const urlParams = url.searchParams;
+    const tag = urlParams.get("page");
+    if(tag === '' || page === tag) {
+      return;
+    }
+    location.href = "/list?page=" + page;
+  }
+
+  function searchNews() {
+    const inputContent = document.querySelector("input").value;
+    if(inputContent === '' || inputContent === null) {
+      alert("검색어를 입력해주세요.");
+      return;
+    }
+    location.href = "/search?inputContent=" + inputContent;
+  }
+
+
+  function reWrite() {
+    document.getElementById("writer").value = "";
+    document.getElementById("title").value = "";
+    document.getElementById("contents").value = "";
+  }
+
+  function formEvent() {
+    const dom = document.getElementById("form-wrapper").style.display;
+     document.getElementById("form-wrapper").style.display = dom === "block" ? "none" : "block";
+  }
+</script>
+</body>
+
+</html>

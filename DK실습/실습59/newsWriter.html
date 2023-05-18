@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<style>
+  table {
+    width: 100%;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #444444;
+
+  }
+</style>
+<body>
+<h1>작성자</h1>
+<main>
+  <table id="wrapper-container">
+    <thead>
+    <th>번호</th>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>내용</th>
+    <th>작성일</th>
+    <th>조회수</th>
+    </thead>
+    <tbody th:each="news : ${newsList}">
+    <tr id="row-wrapper" >
+      <td th:text="${news.id}" style="cursor: pointer;"></td>
+      <td th:text="${news.title}"></td>
+      <td th:text="${news.content}"></td>
+      <td th:text="${news.writer}" style="cursor: pointer;"></td>
+      <td th:text="${news.writeDate}"></td>
+      <td th:text="${news.cnt}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <button type="button" onclick="history.go(-1)" >뒤로가기</button>
+</main>
+</body>
+
+</html>
