@@ -45,7 +45,9 @@ fetch = FetchType.LAZY로 연관관계 객체를 Lazy load 할 수 있는데
 
 향후 team에 대한 정보를 가져올 때 Team에 대한 쿼리를 프록시 객체를 통해 Load한다. (실제 사용 시점에 프록시 초기화)
 
-하지만 Member와 Team을 함께 사용하는 로직이 많다면 즉시 로딩을 하는 편이 좋다.(FetchType.Eager)
+하지만 Member와 Team을 함께 사용하는 로직이 많다면 즉시 로딩을 하는 편이 좋다.(FetchType.Eager) 이론적으로는...
+
+**실제로는 무조건 Lazy**
 
 ### 프록시와 즉시 로딩 주의
 
@@ -58,3 +60,10 @@ fetch = FetchType.LAZY로 연관관계 객체를 Lazy load 할 수 있는데
 - @ManyToOne, @OneToOne은 기본이 즉시 로딩 -> LAZY로 설정
 
 - @OneToMany, @ManyToMany는 기본이 지연 로딩
+
+### 완벽하게 해결 x 루프 쿼리를 해결하는 방법들
+
+- fetch join으로 한방 쿼리를 만든다
+- Entity Graph
+- Batch Size
+
