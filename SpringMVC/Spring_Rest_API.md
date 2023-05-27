@@ -39,6 +39,8 @@ HAL(Hypertext Application Language)은 JSON 또는 XML 코드 내의 외부 리�
 
 
 
+### HateOAS
 
+- 
 
 
